@@ -1,0 +1,42 @@
+<div class="wrapper bg-white">
+    <h1 class="text-center">Inicia sesión</h1>
+    <h2 class="text-muted text-center pt-2">Introduce tus datos para iniciar sesión</h2>
+    <form class="pt-3" [formGroup]="loginForm" (ngSubmit)="onSent()">
+        <div class="form-group py-2">
+            <div class="input-field">
+                <span class="bi bi-person p-2"></span>
+                <input type="email" placeholder="Email" name="email" id="email" required formControlName="email" (focus)="onFocus('email')">
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('email') && email?.invalid" class="text-danger">
+                <div *ngIf="email?.hasError('required')">El email es obligatorio.</div>
+                <div *ngIf="email?.hasError('invalidEmail')">El formato del email no es válido.</div>
+            </div>
+        </div>
+        <div class="form-group py-1 pb-2">
+            <div class="input-field">
+                <span class="bi bi-lock p-2"></span>
+                <input [type]="showPassword ? 'text' : 'password'"
+                    formControlName="pwd"
+                    name="pwd"
+                    id="pwd"
+                    placeholder="Contraseña" 
+                    required
+                    (focus)="onFocus('pwd')">
+                <button class="btn bg-white text-muted" type="button" (click)="togglePasswordVisibility()">
+                    <span class="bi" [ngClass]="showPassword ? 'bi-eye' : 'bi-eye-slash'"></span>
+                </button>
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('password') && password?.invalid" class="text-danger">
+                <div *ngIf="password?.hasError('required')">La contraseña es obligatoria.</div>
+                <!--<div *ngIf="password?.hasError('weakPassword')">La contraseña debe tener al menos 8 caracteres, con al menos una letra y un número.</div>-->
+            </div>
+        </div>
+        <div class="d-flex align-items-start">
+            <div class="ml-auto">
+                <a href="#" id="forgot">¿Has olvidado tu contraseña?</a>
+            </div>
+        </div>
+        <button class="btn btn-block text-center my-3">Enviar</button>
+        <div class="text-center pt-3 text-muted"><span class="me-3">¿No tienes cuenta?</span><a href="/register">Haz clic aquí para inscribirte</a></div>
+    </form>
+</div>

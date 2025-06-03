@@ -1,0 +1,94 @@
+<h1 class="text-center">Información de la biblioteca: {{name}} </h1>
+<h2 class="text-muted text-center pt-2">Esta es la información que tenemos sobre esta biblioteca</h2>
+<p class="text-muted text-center pt-2" *ngIf="!isClient">El usuario creador es: {{usernameCreatedBy}}</p>
+
+<form class="pt-3 wrapper" [formGroup]="libraryForm" (ngSubmit)="onSent()">
+    
+    <div class="image-preview p-3 rounded ">
+        <img *ngIf="libraryForm.value.foto" [src]="'data:' + libraryForm.value.fotoMimeType + ';base64, '+ libraryForm.value.foto" alt="Imagen biblioteca" class="img-fluid rounded" />
+        <p *ngIf="!libraryForm.value.foto" class="text-muted"> No se puede mostrar la imagen</p>
+    </div>
+
+    <div class="form-group py-2">
+        <div class="input-field disabled">
+            <span class="bi bi-person-fill p-2"></span>
+            <input type="text" placeholder="Nombre" name="nombre" id="nombre" readonly formControlName="nombre" >
+        </div>
+    </div>
+    
+    <div class="form-group py-2" *ngIf="!isClient">
+        <div class="input-field disabled">
+            <span class="bi bi-person-vcard-fill p-2"></span>
+            <input type="text" name="cif" id="cif" readonly formControlName="cif" >
+        </div>
+    </div>
+    
+    <div class="form-group py-2">
+        <div class="input-field" [class.disabled]="!editMode">
+            <span class="bi bi-telephone-fill p-2"></span>
+            <input type="tel" placeholder="Telefono" name="telefono" id="telefono" formControlName="telefono" (focus)="onFocus('telefono')" [readonly]="!editMode" [required]="editMode">
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('telefono') && telefono?.invalid" class="text-danger">
+        <div *ngIf="telefono?.hasError('required')">El telefono es obligatorio.</div>
+        <div *ngIf="telefono?.hasError('invalidPhone')">El formato el telefono no es correcto.</div>
+    </div>
+
+    <div class="form-group py-2">
+        <div class="input-field" [class.disabled]="!editMode">
+            <span class="bi bi-map-fill p-2"></span>
+            <input type="text" placeholder="Dirección" name="direccion" id="direccion" formControlName="direccion" (focus)="onFocus('direccion')" [readonly]="!editMode" [required]="editMode">
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('direccion') && direccion?.invalid" class="text-danger">
+        <div *ngIf="direccion?.hasError('required')">La dirección es obligatoria.</div>
+        <div *ngIf="direccion?.hasError('invalidAddress')">El formato de la dirección no es correcta.</div>
+    </div>
+
+    <div class="form-group py-2">
+        <div class="input-field disabled">
+            <span class="bi bi-envelope-fill p-2"></span>
+            <input type="email" placeholder="Email" name="email" id="email" readonly formControlName="email" >
+        </div>
+    </div>
+
+    <div class="form-group py-2">
+        <div class="input-field file-upload-field" [class.disabled]="!editMode">
+            <span class="bi bi-image p-2"></span>
+            <input type="file" accept="image/*" name="foto" id="foto" (focus)="onFocus('foto')" (change)="onImageSelected($event)" [disabled]="!editMode" [required]="editMode">
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('foto') && foto?.invalid" class="text-danger">
+        <div *ngIf="foto?.hasError('required')">La imagen es obligatoria.</div>
+    </div>
+
+    <div class="form-group py-2">
+        <div class="input-field input-field-top" [class.disabled]="!editMode">
+            <span class="bi bi-file-text-fill p-2"></span>
+            <textarea placeholder="Descripción" name="descripcion" id="descripcion" [required]="editMode" formControlName="descripcion" rows="4" (focus)="onFocus('descripcion')" [readonly]="!editMode"></textarea>
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('descripcion') && descripcion?.invalid" class="text-danger">
+        <div *ngIf="descripcion?.hasError('required')">La descripción es obligatoria.</div>
+        <div *ngIf="descripcion?.hasError('invalidDescription')">El formato de la descripción no es minimo 10 caracteres máximo 200.</div>
+    </div>
+
+    <div class="form-group py-2 text-center" *ngIf="canEditOrDelete">
+        <button type="button" class="btn btn-edit-mode text-center my-3" (click)="editMode ? deshabilitarEdicion() : habilitarEdicion()" >
+            {{ editMode ? 'Cancelar edición' : 'Modo edición' }}
+            <span *ngIf="editMode" class="bi bi-slash-circle p-2"></span>
+            <span *ngIf="!editMode" class="bi bi-pencil p-2"></span>
+        </button>
+    </div>
+
+
+    <button *ngIf="editMode" class="btn btn-block text-center my-3">Actualizar cambios</button>
+    <div class="form-group text-center" *ngIf="canEditOrDelete">
+        <button type="button" class="btn btn-outline-danger my-3" (click)="deleteLibrary()">Borrar biblioteca</button>
+    </div>
+    <div class="form-group text-center" *ngIf="!canEditOrDelete">
+        <button type="button" class="btn btn-block text-center my-3" (click)="goBack()">Volver</button>
+    </div>
+       
+    
+</form>

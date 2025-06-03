@@ -1,0 +1,73 @@
+<h1 class="text-center">Nuevo proveedor</h1>
+<h2 class="text-muted text-center pt-2">Cumplimenta el formulario para registrar un proveedor en el sistema</h2>
+<form class="pt-3 wrapper" [formGroup]="providerForm" (ngSubmit)="onSent()">
+    <div class="form-group py-2">
+        <div class="input-field">
+            <span class="bi bi-person-fill p-2"></span>
+            <input type="text" placeholder="Nombre" name="nombre" id="nombre" required formControlName="nombre" (focus)="onFocus('nombre')">
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('nombre') && nombre?.invalid" class="text-danger">
+        <div *ngIf="nombre?.hasError('required')">El nombre es obligatorio.</div>
+        <div *ngIf="nombre?.hasError('invalidName')">El formato del nombre no es correcto.</div>
+    </div>
+    
+
+    <div class="form-group py-2">
+        <div class="input-field">
+            <span class="bi bi-person-fill p-2"></span>
+            <input type="text" placeholder="Nombre del contacto" name="contacto" id="contacto" required formControlName="contacto" (focus)="onFocus('contacto')">
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('contacto') && contacto?.invalid" class="text-danger">
+        <div *ngIf="contacto?.hasError('required')">El nombre del contacto es obligatorio.</div>
+        <div *ngIf="contacto?.hasError('invalidName')">El formato del nombre del contacto no es correcto.</div>
+    </div>
+
+    <div class="form-group py-2">
+        <div class="input-field">
+            <span class="bi bi-person-vcard-fill p-2"></span>
+            <input type="text" placeholder="DNI" name="dni" id="dni" required formControlName="dni" (focus)="onFocus('dni')">
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('dni') && dni?.invalid" class="text-danger">
+        <div *ngIf="dni?.hasError('required')">El DNI es obligatorio.</div>
+        <div *ngIf="dni?.hasError('invalidDNI')">El formato del DNI no es correcto.</div>
+    </div>
+
+    <div class="form-group py-2">
+        <div class="input-field">
+            <span class="bi bi-telephone-fill p-2"></span>
+            <input type="tel" placeholder="Telefono" name="telefono" id="telefono" required formControlName="telefono" (focus)="onFocus('telefono')">
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('telefono') && telefono?.invalid" class="text-danger">
+        <div *ngIf="telefono?.hasError('required')">El telefono es obligatorio.</div>
+        <div *ngIf="telefono?.hasError('invalidPhone')">El formato el telefono no es correcto.</div>
+    </div>
+
+    <div class="form-group py-2">
+        <div class="input-field">
+            <span class="bi bi-map-fill p-2"></span>
+            <input type="text" placeholder="Dirección" name="direccion" id="direccion" required formControlName="direccion" (focus)="onFocus('direccion')">
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('direccion') && direccion?.invalid" class="text-danger">
+        <div *ngIf="direccion?.hasError('required')">La dirección es obligatoria.</div>
+        <div *ngIf="direccion?.hasError('invalidAddress')">El formato de la dirección no es correcta.</div>
+    </div>
+
+    <div class="form-group py-2">
+        <div class="input-field">
+            <span class="bi bi-envelope-fill p-2"></span>
+            <input type="email" placeholder="Email" name="email" id="email" required formControlName="email" (focus)="onFocus('email')">
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('email') && email?.invalid" class="text-danger">
+        <div *ngIf="email?.hasError('required')">El email es obligatorio.</div>
+        <div *ngIf="email?.hasError('invalidEmail')">El formato del email no es válido.</div>
+    </div>
+
+    <button class="btn btn-block text-center my-3">Crear</button>
+    
+</form>

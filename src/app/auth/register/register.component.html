@@ -1,0 +1,149 @@
+<h1 class="text-center">Registro</h1>
+<h2 class="text-muted text-center pt-2">Cumplimenta el formulario para registrarte en el sistema</h2>
+<form class="pt-3 wrapper" [formGroup]="registerForm" (ngSubmit)="onSent()">
+    <div class="row">
+        <div class="col-md-6">
+
+            <h3 class="mb-3 text-center">Datos personales</h3>
+
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <span class="bi bi-person-fill p-2"></span>
+                    <input type="text" placeholder="Nombre" name="nombre" id="nombre" required formControlName="nombre" (focus)="onFocus('nombre')">
+                </div>
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('nombre') && nombre?.invalid" class="text-danger">
+                <div *ngIf="nombre?.hasError('required')">El nombre es obligatorio.</div>
+                <div *ngIf="nombre?.hasError('invalidName')">El formato del nombre no es correcto.</div>
+            </div>
+            
+
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <span class="bi bi-person-fill p-2"></span>
+                    <input type="text" placeholder="Apellidos" name="apellido" id="apellido" required formControlName="apellido" (focus)="onFocus('apellido')">
+                </div>
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('apellido') && apellido?.invalid" class="text-danger">
+                <div *ngIf="apellido?.hasError('required')">Los apellidos son obligatorios.</div>
+                <div *ngIf="apellido?.hasError('invalidName')">El formato del apellido no es correcto.</div>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <span class="bi bi-person-vcard-fill p-2"></span>
+                    <input type="text" placeholder="DNI" name="dni" id="dni" required formControlName="dni" (focus)="onFocus('dni')">
+                </div>
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('dni') && dni?.invalid" class="text-danger">
+                <div *ngIf="dni?.hasError('required')">El DNI es obligatorio.</div>
+                <div *ngIf="dni?.hasError('invalidDNI')">El formato del DNI no es correcto.</div>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <span class="bi bi-telephone-fill p-2"></span>
+                    <input type="tel" placeholder="Telefono" name="telefono" id="telefono" required formControlName="telefono" (focus)="onFocus('telefono')">
+                </div>
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('telefono') && telefono?.invalid" class="text-danger">
+                <div *ngIf="telefono?.hasError('required')">El telefono es obligatorio.</div>
+                <div *ngIf="telefono?.hasError('invalidPhone')">El formato el telefono no es correcto.</div>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <span class="bi bi-map-fill p-2"></span>
+                    <input type="text" placeholder="Dirección" name="direccion" id="direccion" required formControlName="direccion" (focus)="onFocus('direccion')">
+                </div>
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('direccion') && direccion?.invalid" class="text-danger">
+                <div *ngIf="direccion?.hasError('required')">La dirección es obligatoria.</div>
+                <div *ngIf="direccion?.hasError('invalidAddress')">El formato de la dirección no es correcta.</div>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <span class="bi bi-calendar-event-fill p-2"></span>
+                    <input type="date" placeholder="Fecha Nacimiento" name="birth" id="birth" required formControlName="birth" (focus)="onFocus('birth')">
+                </div>
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('birth') && birth?.invalid" class="text-danger">
+                <div *ngIf="birth?.hasError('required')">La fecha de nacimiento es obligatoria.</div>
+                <div *ngIf="birth?.hasError('underAge')">Debes ser mayor de edad.</div>
+            </div>
+        </div>
+    
+        <div class="col-md-1 d-flex justify-content-center">
+            <div class="divider"></div>
+        </div>
+
+        <div class="col-md-5">
+            <h3 class="mb-3 text-center">Datos de usuario</h3>
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <span class="bi bi-envelope-fill p-2"></span>
+                    <input type="email" placeholder="Email" name="email" id="email" required formControlName="email" (focus)="onFocus('email')">
+                </div>
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('email') && email?.invalid" class="text-danger">
+                <div *ngIf="email?.hasError('required')">El email es obligatorio.</div>
+                <div *ngIf="email?.hasError('invalidEmail')">El formato del email no es válido.</div>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <span class="bi bi-envelope-fill p-2"></span>
+                    <input type="email" placeholder="Repite el email" name="repiteEmail" id="repiteEmail" required formControlName="repiteEmail" (focus)="onFocus('repiteEmail')">
+                </div>
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('repiteEmail') && repiteEmail?.invalid" class="text-danger">
+                <div *ngIf="repiteEmail?.hasError('required')">El email es obligatorio.</div>
+                <div *ngIf="repiteEmail?.hasError('invalidEmail')">El formato del email no es válido.</div>
+            </div>
+
+            
+
+            <div class="form-group py-1 pb-2">
+                <div class="input-field">
+                    <span class="bi bi-lock-fill p-2"></span>
+                    <input type="password"
+                        name="pwd"
+                        id="pwd"
+                        placeholder="Contraseña" 
+                        required
+                        formControlName="pwd" (focus)="onFocus('pwd')">
+                </div>
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('pwd') && pwd?.invalid" class="text-danger">
+                <div *ngIf="pwd?.hasError('required')">La contraseña es obligatoria.</div>
+                <div *ngIf="pwd?.hasError('weakPassword')">Debe tener mínimo 8 caracteres, al menos una letra y un número.</div>
+            </div>
+
+            <div class="form-group py-1 pb-2">
+                <div class="input-field">
+                    <span class="bi bi-lock-fill p-2"></span>
+                    <input type="password"
+                        name="repitePwd"
+                        id="repitePwd"
+                        placeholder="Repite contraseña" 
+                        required
+                        formControlName="repitePwd" (focus)="onFocus('repitePwd')">
+                </div>
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('repitePwd') && repitePwd?.invalid" class="text-danger">
+                <div *ngIf="repitePwd?.hasError('required')">La contraseña es obligatoria.</div>
+                <div *ngIf="repitePwd?.hasError('weakPassword')">Debe tener mínimo 8 caracteres, al menos una letra y un número.</div>
+            </div>
+
+            <div *ngIf="formSent && repiteEmail?.hasError('emailMismatch')" class="text-danger pt-3">
+                <div *ngIf="repiteEmail?.hasError('emailMismatch')">Los emails no coinciden.</div>
+            </div>
+            <div *ngIf="formSent && repitePwd?.hasError('passwordMismatch')" class="text-danger pt-3">
+                <div *ngIf="repitePwd?.hasError('passwordMismatch')">Las contraseñas no coinciden.</div>
+            </div>
+
+        </div>
+    <button class="btn btn-block text-center my-3">Enviar</button>
+    </div>
+</form>

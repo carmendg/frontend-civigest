@@ -1,0 +1,124 @@
+<div class="home">
+    <div class="d-flex flex-column align-items-center gap-4">
+        <h1>{{ title }}</h1>
+        <div id="carrusel" class="carousel slide carousel-custom border border-secondary rounded" data-bs-ride="carousel" data-bs-interval="5000" data-bs-pause="false">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carrusel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#carrusel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#carrusel" data-bs-slide-to="2"></button>
+                <button type="button" data-bs-target="#carrusel" data-bs-slide-to="3"></button>
+            </div>
+            
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="carrusel/1.png" alt="Bienvenido" class="d-block">
+                </div>
+                <div class="carousel-item">
+                    <img src="carrusel/2.png" alt="Préstamo de libros" class="d-block">
+                </div>
+                <div class="carousel-item">
+                    <img src="carrusel/3.png" alt="Reserva asientos" class="d-block ">
+                </div>
+                <div class="carousel-item">
+                    <img src="carrusel/4.png" alt="Trabajo a futuro" class="d-block ">
+                </div>
+            </div>
+            
+            <button class="carousel-control-prev fs-1" type="button" data-bs-target="#carrusel" data-bs-slide="prev">
+                <span class="icon-carousel bi bi-arrow-left-circle-fill"></span>
+            </button>
+            <button class="carousel-control-next fs-1" type="button" data-bs-target="#carrusel" data-bs-slide="next">
+                <span class="icon-carousel bi bi-arrow-right-circle-fill"></span>
+            </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <h2 class="text-center mt-4 mb-4">¡Novedades en libros!</h2>
+        <div *ngIf="libros.length > 0; else noBooks">
+            <div class="container-fluid mt-5">          
+              <div class="row g-4 justify-content-center">
+          
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let libro of libros | slice:0:maxBooks">
+                  <div class="card h-100 shadow-sm card-clickable" (click)="verDetallesLibro(libro)">
+                    <img *ngIf="libro.photo" [src]="'data:' + libro.photoMimeType + ';base64,' + libro.photo" class="card-img-top" alt="{{ libro.title }}"/>
+                    <div class="card-body text-center">
+                      <p class="card-title">{{ libro.title }}</p>
+                    </div>
+                  </div>
+                </div>          
+              </div>
+          
+              <div class="text-center mt-3">
+                <a routerLink="/booklist" class="btn btn-outline-primary">Ver más libros</a>
+              </div>
+            </div>
+        </div>
+        <ng-template #noBooks>
+        <div class="text-center mt-5">
+            <p>No hay novedades disponibles por el momento.</p>
+        </div>
+        </ng-template>
+
+        <div class="divider"></div>
+        
+
+        <h2 class="text-center mt-4 mb-4">Visita nuestras bibliotecas</h2>
+        <div *ngIf="bibliotecas.length > 0; else noBiblio">
+            <div class="container-fluid mt-5">          
+              <div class="row g-4 justify-content-center">
+          
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let biblio of bibliotecas | slice:0:maxLibrary">
+                  <div class="card h-100 shadow-sm card-clickable" (click)="verDetallesBiblio(biblio)">
+                      <img *ngIf="biblio.photo" [src]="'data:' + biblio.photoMimeType + ';base64,' + biblio.photo" class="card-img-top" alt="{{ biblio.name }}"/>
+                      <div class="card-body text-center">
+                        <p class="card-title">{{ biblio.name }}</p>
+                      </div>
+                  </div>
+                </div>
+          
+              </div>
+          
+              <div class="text-center mt-3">
+                <a routerLink="/librarylist" class="btn btn-outline-primary">Ver más sobre bibliotecas</a>
+              </div>
+            </div>
+        </div>
+        <ng-template #noBiblio>
+        <div class="text-center mt-5">
+            <p>No hay información disponibles por el momento.</p>
+        </div>
+        </ng-template>
+
+        <div class="divider"></div>
+
+        <h2 class="text-center mt-4 mb-4">Actualizaciones en archivos online</h2>
+        <!--<div *ngIf="books.length > 0; else noBooks">
+            <div class="container-fluid mt-5">          
+              <div class="row g-4 justify-content-center">
+          
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let book of books | slice:0:maxBooks">
+                  <div class="card h-100 shadow-sm">
+                    <a [routerLink]="book.link" class="text-decoration-none text-dark">
+                      <img src="carrusel/1.png" class="card-img-top" [alt]="book.title">
+                      <div class="card-body text-center">
+                        <p class="card-title">{{ book.title }}</p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+          
+              </div>
+          
+              <div class="text-center mt-3">
+                <a routerLink="/libros" class="btn btn-outline-primary">Ver más archivos</a>
+              </div>
+            </div>
+        </div>
+        <ng-template #noBooks>
+        <div class="text-center mt-5">
+            <p>No hay actualizaciones disponibles por el momento.</p>
+        </div>
+        </ng-template>-->
+    </div>
+</div>

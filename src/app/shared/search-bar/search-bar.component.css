@@ -1,0 +1,36 @@
+.input-field{
+    border-radius: 5px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border: 1px solid #1695e9;
+    color: #1695e9
+}
+
+input{
+    border: none;
+    outline: none;
+    box-shadow: none;
+    width: 100%;
+    padding: 0px 2px;
+    font-family: 'Lora', serif; 
+}
+.btn.btn-filter.active {
+    background-color: #1695e9;
+    color: white;
+}
+
+.btn.btn-filter{
+    background-color: #80D7FF;
+    color: black;
+}
+.btn.btn-filter:hover{
+    background-color: #1695e9;
+    color: white;
+}
+
+.filter-style{
+    margin-bottom: 2%;
+}
+

@@ -1,0 +1,109 @@
+<h1 class="text-center">Información del usuario: {{username}} {{usersurname}}</h1>
+<h2 class="text-muted text-center pt-2">Esta es la información que tenemos sobre ese usuario</h2>
+<form class="pt-3 wrapper" [formGroup]="userForm" (ngSubmit)="onSent()">
+    <div class="row">
+        <div class="col-md-6">
+
+            <h3 class="mb-3 text-center">Datos personales</h3>
+
+            <div class="form-group py-2">
+                <div class="input-field disabled">
+                    <span class="bi bi-person-fill p-2"></span>
+                    <input type="text" placeholder="Nombre" name="nombre" id="nombre" readonly formControlName="nombre" >
+                </div>
+            </div>            
+
+            <div class="form-group py-2">
+                <div class="input-field disabled">
+                    <span class="bi bi-person-fill p-2"></span>
+                    <input type="text" placeholder="Apellidos" name="apellido" id="apellido" readonly formControlName="apellido">
+                </div>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field disabled">
+                    <span class="bi bi-person-vcard-fill p-2"></span>
+                    <input type="text" placeholder="DNI" name="dni" id="dni" readonly formControlName="dni" >
+                </div>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field disabled">
+                    <span class="bi bi-telephone-fill p-2"></span>
+                    <input type="tel" placeholder="Telefono" name="telefono" id="telefono" readonly formControlName="telefono">
+                </div>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field disabled">
+                    <span class="bi bi-map-fill p-2"></span>
+                    <input type="text" placeholder="Dirección" name="direccion" id="direccion" readonly formControlName="direccion">
+                </div>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field disabled">
+                    <span class="bi bi-calendar-event-fill p-2"></span>
+                    <input type="date" placeholder="Fecha Nacimiento" name="birth" id="birth" readonly formControlName="birth">
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-md-1 d-flex justify-content-center">
+            <div class="divider"></div>
+        </div>
+
+        <div class="col-md-5">
+            <h3 class="mb-3 text-center">Datos de la cuenta</h3>
+            <div class="form-group py-2">
+                <div class="input-field disabled" >
+                    <span class="bi bi-envelope-fill p-2"></span>
+                    <input type="email" placeholder="Email" name="email" id="email" readonly formControlName="email" >
+                </div>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field" [class.disabled]="!editMode">
+                    <label for="estado" class="form-label p-2">Rol: </label>
+                    <input *ngIf="!editMode" type="text" [value]="userForm.get('rol')?.value" name="role" id="role" readonly formControlName="rol" >
+                    <select *ngIf="editMode" formControlName="rol" class="form-control border-0" name="role" id="role" [disabled]="!editMode" (focus)="onFocus('rol')">
+                        <option *ngFor="let r of roles" [value]="r.value">{{ r.label }}</option>
+                    </select>
+                    <span *ngIf="editMode" class="bi bi-caret-down-fill p-2"></span>
+                </div>
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('rol') && rol?.invalid" class="text-danger">
+                <div *ngIf="rol?.hasError('required')">El rol es obligatorio.</div>
+                <div *ngIf="rol?.hasError('invalidEnumValue')">Debes introducir un valor correcto.</div>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field" [class.disabled]="!editMode">
+                    <label for="estado" class="form-label p-2">Estado: </label>
+                    <input *ngIf="!editMode" type="text" [value]="userForm.get('estado')?.value" name="estado" id="estado" readonly formControlName="estado" >
+                    <select *ngIf="editMode" formControlName="estado" class="form-control border-0" name="estado" id="estado" [disabled]="!editMode" (focus)="onFocus('estado')">
+                        <option *ngFor="let s of statuses" [value]="s.value">{{ s.label }}</option>
+                    </select>                    
+                    <span *ngIf="editMode" class="bi bi-caret-down-fill p-2"></span>
+                </div>
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('estado') && estado?.invalid" class="text-danger">
+                <div *ngIf="estado?.hasError('required')">El estado es obligatorio.</div>
+                <div *ngIf="estado?.hasError('invalidEnumValue')">Debes introducir un valor correcto.</div>
+            </div>
+
+            <div class="form-group py-2 text-center">
+                <button type="button" class="btn btn-edit-mode text-center my-3" (click)="editMode ? deshabilitarEdicion() : habilitarEdicion()">
+                    {{ editMode ? 'Cancelar edición' : 'Modo edición' }}
+                    <span *ngIf="editMode" class="bi bi-slash-circle p-2"></span>
+                    <span *ngIf="!editMode" class="bi bi-pencil p-2"></span>
+                </button>
+            </div>
+        </div>
+
+        <button *ngIf="editMode" class="btn btn-block text-center my-3">Actualizar cambios</button>
+        <div class="form-group text-center">
+            <button type="button" class="btn btn-outline-danger my-3" (click)="deleteAccount()">Borrar usuario</button>
+        </div>
+    </div>
+</form>

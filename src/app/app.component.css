@@ -1,0 +1,33 @@
+ .navbar-custom {
+    background-color: #80D7FF !important;
+  }
+  
+  .navbar-custom .nav-link {
+    color: black;
+    font-weight: bold;
+  }
+  
+  .navbar-custom .nav-link:hover {
+    color: #008BCC; 
+    color: #005780;
+  }
+  .navbar-custom .rounded-pill{
+    color: black;
+  }
+  .navbar-custom .dropdown-menu {
+    background-color: #CCEFFF !important;
+    color: black;
+  }
+  .navbar-custom .dropdown-menu .dropdown-item:hover{
+    background-color: #008BCC !important;
+    color:white;
+  }
+  .arriba-icon {
+    color: #80D7FF;
+  }
+  footer, #encabezado{
+    background-color: #e6f7ff;
+  }
+  #logo {
+    width: 50%;
+  }

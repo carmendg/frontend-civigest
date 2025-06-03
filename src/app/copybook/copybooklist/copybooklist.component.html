@@ -1,0 +1,62 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-center flex-grow-1 m-0">Lista de ejemplares</h1>
+        <span (click)="createCopybook()" class="bi bi-plus-circle-fill fs-3 text-primary" title="Añadir nuevo ejemplar"></span>
+    </div>
+    <h2 *ngIf="bookTitle !== ''" class="text-muted text-center pt-2">Mostrando del libro: <strong> {{bookTitle}} </strong></h2>
+    <h2 *ngIf="libraryName !== ''" class="text-muted text-center pt-2">Mostrando de la biblioteca: <strong> {{libraryName}} </strong></h2>
+ 
+    <div *ngIf="loading" class="overlay">
+        <mat-spinner></mat-spinner>
+    </div>
+
+    <app-search-bar #inputRef [placeholder]="'Buscar por título libro...'" [availableFilters]="filters"  (search)="applyFilter($event)"></app-search-bar>
+  
+    <table mat-table [dataSource]="dataSource" class="style-header-table style-table" matSort>
+      <ng-container matColumnDef="title">
+        <th class="" [ngClass]="'centered'" mat-header-cell *matHeaderCellDef mat-sort-header>Titulo</th>
+        <td mat-cell *matCellDef="let copybook">{{ copybook.book }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="library">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Biblioteca</th>
+        <td mat-cell *matCellDef="let copybook">{{ copybook.library }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+        <td mat-cell *matCellDef="let copybook">{{ copybook.status }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="ubication">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Ubicación </th>
+        <td mat-cell *matCellDef="let copybook">{{ copybook.ubication }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="editionNum">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Edición</th>
+        <td mat-cell *matCellDef="let copybook">{{ copybook.editionNum }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="username">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Operador de alta</th>
+        <td mat-cell *matCellDef="let copybook">{{ copybook.usernameCreatedBy }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let copybook">
+          <span (click)="viewCopybook(copybook)" title="Visualizar" class="icon-style mx-2"><i class="bi bi-eye"></i></span>
+          <span (click)="reserveCopyBook(copybook)" title="Reservar" class="icon-style mx-2" *ngIf="isLogged"><i class="bi bi-bookmark-plus"></i></span>
+          <span (click)="editCopybook(copybook)" title="Editar" class="icon-style mx-2" *ngIf="!isClient" ><i class="bi bi-pencil"></i></span>
+          <span (click)="deleteCopybook(copybook)" title="Eliminar" class="icon-style mx-2" *ngIf="!isClient" ><i class="bi bi-trash"></i></span>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  
+    <mat-paginator class="style-footer mb-5" [length]="totalItems" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25]" (page)="onPageChange($event)">
+    </mat-paginator>
+  </div>

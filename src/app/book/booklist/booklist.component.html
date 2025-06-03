@@ -1,0 +1,43 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-center flex-grow-1 m-0">Nuestros libros</h1>
+        <span *ngIf="canAdd" (click)="createBook()" class="bi bi-plus-circle-fill fs-3 text-primary" title="Añadir nuevo libro"></span>
+      </div>
+  
+    <div *ngIf="loading" class="overlay">
+        <mat-spinner></mat-spinner>
+    </div>
+
+    <app-search-bar [availableFilters]="filters" (search)="applyFilter($event)"></app-search-bar>
+
+    <div *ngIf="libros.length > 0 && !loading; else noLibro">
+        <div class="container-fluid mt-5">          
+          <div class="row g-4 justify-content-center">
+
+            <div class="col-12 col-md-4 mb-4" *ngFor="let libro of libros">
+                <div class="card h-100 shadow-sm card-clickable" (click)="verDetalles(libro)" >
+                    <img *ngIf="libro.photo" [src]="'data:' + libro.photoMimeType + ';base64,' + libro.photo" class="card-img-top" alt="{{ libro.title }}"/>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ libro.title }}</h5>
+                        <p class="card-text flex-grow-1 m-0"> <strong>Editorial: </strong>{{ libro.publisher }}</p>
+                        <p class="card-text flex-grow-1"> <strong>Autores: </strong>{{ getAuthorsList(libro) }}</p>
+                        <p class="card-text flex-grow-1">{{ libro.summary }}</p>
+                        <button class="btn btn-outline-primary mt-auto" (click)="verDetalles(libro); $event.stopPropagation()" >
+                        Ver más
+                        </button>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      
+        <div class="text-center mt-3 my-3">
+            <button class="btn btn-primary" (click)="loadMore()">Cargar más <i class="bi bi-arrow-clockwise"></i></button>
+        </div>
+    </div>
+    <ng-template #noLibro>
+        <div class="text-center mt-5">
+            <p>No hay información disponibles por el momento.</p>
+        </div>
+    </ng-template>
+</div>

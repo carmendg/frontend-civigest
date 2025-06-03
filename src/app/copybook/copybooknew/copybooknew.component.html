@@ -1,0 +1,74 @@
+<h1 class="text-center">Nuevo ejemplar</h1>
+<h2 class="text-muted text-center pt-2">Cumplimenta el formulario para registrar un ejemplar en el sistema</h2>
+<form class="pt-3 wrapper" [formGroup]="copybookForm" (ngSubmit)="onSent()">
+    <div class="form-group py-2">
+        <div class="input-field">
+            <span class="bi bi-map-fill p-2"></span>
+            <input type="text" placeholder="Ubicación(pasillo, estantería, etc.)" name="ubicacion" id="ubicacion" required formControlName="ubicacion" (focus)="onFocus('ubicacion')">
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('ubicacion') && ubicacion?.invalid" class="text-danger">
+        <div *ngIf="ubicacion?.hasError('required')">La ubicación es obligatoria.</div>
+        <div *ngIf="ubicacion?.hasError('invalidName')">El formato de la ubicación no es correcto.</div>
+    </div>
+    
+
+    <div class="form-group py-2">
+        <div class="input-field">
+            <span class="bi bi-bookmark-fill p-2"></span>
+            <input type="number" placeholder="Edición " name="edicion" id="edicion" required formControlName="edicion" (focus)="onFocus('edicion')">
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('edicion') && edicion?.invalid" class="text-danger">
+        <div *ngIf="edicion?.hasError('required')">El número de edición es obligatorio.</div>
+        <div *ngIf="edicion?.hasError('invalidNumPag')">El número de edición debe ser mayor que cero.</div>
+    </div>
+
+    <div class="form-group py-2">
+        <div class="input-field">
+            <label for="libro" class="form-label p-2">Libro: </label>
+            <input
+    matInput
+    placeholder="Escribe el título"
+    [formControl]="libroCtrl"
+    [matAutocomplete]="auto"
+    (input)="onBookInput($event)"
+  />
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onBookSelected($event.option.value)">
+    <mat-option *ngFor="let book of filteredBooks" [value]="book">
+      {{ book.title }}
+    </mat-option>
+  </mat-autocomplete>
+            <!--<input class="form-control border-0" list="bookOptions" id="libro"  [value]="selectedBookTitle" (input)="onBookInput($event)" placeholder="Escribe el título" required>
+            <datalist id="bookOptions">
+                <option *ngFor="let book of filteredBooks" [value]="book.title"></option>
+            </datalist>-->
+            <span class="bi bi bi-book-half p-2"></span>
+            <!--<span class="bi bi bi-book-half p-2"></span>
+            <ng-select [items]="filteredBooks" bindLabel="title"  [typeahead]="bookSearchInput$" formControlName="libro" class="form-control border-0" 
+                       placeholder="algo"  [virtualScroll]="true" [hideSelected]="true" [addTag]="false" [clearable]="false" (change)="onBookSelected()" [closeOnSelect]="true"></ng-select>-->
+            
+            
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('libro') && libro?.invalid" class="text-danger">
+        <div *ngIf="libro?.hasError('required')">El libro es obligatorio.</div>
+    </div>
+
+    <!--<div class="form-group py-2">
+        <div class="input-field">
+            <label for="biblio" class="form-label p-2">Biblioteca: </label>
+            <select  formControlName="biblio" class="form-control border-0" name="biblio" id="biblio" (focus)="onFocus('biblio')">
+                <option *ngFor="let l of libraries" [value]="l.id">{{ l.name }}</option>
+            </select>
+            <span class="bi bi bi-buildings-fill p-2"></span>
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('estado') && estado?.invalid" class="text-danger">
+        <div *ngIf="estado?.hasError('required')">El estado es obligatorio.</div>
+        <div *ngIf="estado?.hasError('invalidEnumValue')">Debes introducir un valor correcto.</div>
+    </div>-->
+
+    <button class="btn btn-block text-center my-3">Crear</button>
+    
+</form>

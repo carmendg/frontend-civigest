@@ -1,0 +1,116 @@
+<h1 class="text-center">Mi perfil</h1>
+<h2 class="text-muted text-center pt-2">Esta es toda la información que tenemos sobre tí</h2>
+<form class="pt-3 wrapper" [formGroup]="profileForm" (ngSubmit)="onSent()">
+    <div class="row">
+        <div class="col-md-6">
+
+            <h3 class="mb-3 text-center">Datos personales</h3>
+
+            <div class="form-group py-2">
+                <div class="input-field disabled">
+                    <span class="bi bi-person-fill p-2"></span>
+                    <input type="text" placeholder="Nombre" name="nombre" id="nombre" readonly formControlName="nombre" >
+                </div>
+            </div>            
+
+            <div class="form-group py-2">
+                <div class="input-field disabled">
+                    <span class="bi bi-person-fill p-2"></span>
+                    <input type="text" placeholder="Apellidos" name="apellido" id="apellido" readonly formControlName="apellido">
+                </div>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field disabled">
+                    <span class="bi bi-person-vcard-fill p-2"></span>
+                    <input type="text" placeholder="DNI" name="dni" id="dni" readonly formControlName="dni" >
+                </div>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <span class="bi bi-telephone-fill p-2"></span>
+                    <input type="tel" placeholder="Telefono" name="telefono" id="telefono" formControlName="telefono" (focus)="onFocus('telefono')">
+                </div>
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('telefono') && telefono?.invalid" class="text-danger">
+                <div *ngIf="telefono?.hasError('required')">El telefono es obligatorio.</div>
+                <div *ngIf="telefono?.hasError('invalidPhone')">El formato el telefono no es correcto.</div>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <span class="bi bi-map-fill p-2"></span>
+                    <input type="text" placeholder="Dirección" name="direccion" id="direccion" formControlName="direccion" (focus)="onFocus('direccion')">
+                </div>
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('direccion') && direccion?.invalid" class="text-danger">
+                <div *ngIf="direccion?.hasError('required')">La dirección es obligatoria.</div>
+                <div *ngIf="direccion?.hasError('invalidAddress')">El formato de la dirección no es correcta.</div>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field disabled">
+                    <span class="bi bi-calendar-event-fill p-2"></span>
+                    <input type="date" placeholder="Fecha Nacimiento" name="birth" id="birth" readonly formControlName="birth">
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-md-1 d-flex justify-content-center">
+            <div class="divider"></div>
+        </div>
+
+        <div class="col-md-5">
+            <h3 class="mb-3 text-center">Datos de usuario</h3>
+            <div class="form-group py-2">
+                <div class="input-field disabled">
+                    <span class="bi bi-envelope-fill p-2"></span>
+                    <input type="email" placeholder="Email" name="email" id="email" readonly formControlName="email" >
+                </div>
+            </div>
+
+            <div class="form-group py-1 pb-2">
+                <div class="input-field">
+                    <span class="bi bi-lock-fill p-2"></span>
+                    <input type="password"
+                        name="pwd"
+                        id="pwd"
+                        placeholder="Actualiza contraseña" 
+                        formControlName="pwd" (focus)="onFocus('pwd')">
+                </div>
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('pwd') && pwd?.invalid" class="text-danger">
+                <div *ngIf="pwd?.hasError('required')">La contraseña es obligatoria.</div>
+                <div *ngIf="pwd?.hasError('weakPassword')">Debe tener mínimo 8 caracteres, al menos una letra y un número.</div>
+            </div>
+
+            <div class="form-group py-1 pb-2">
+                <div class="input-field">
+                    <span class="bi bi-lock-fill p-2"></span>
+                    <input type="password"
+                        name="repitePwd"
+                        id="repitePwd"
+                        placeholder="Repite contraseña" 
+                        formControlName="repitePwd" (focus)="onFocus('repitePwd')">
+                </div>
+            </div>
+            <div *ngIf="formSent && !clearedErrors.has('repitePwd') && repitePwd?.invalid" class="text-danger">
+                <div *ngIf="repitePwd?.hasError('required')">La contraseña es obligatoria.</div>
+                <div *ngIf="repitePwd?.hasError('weakPassword')">Debe tener mínimo 8 caracteres, al menos una letra y un número.</div>
+            </div>
+
+            <div *ngIf="formSent && repitePwd?.hasError('passwordMismatch')" class="text-danger pt-3">
+                <div *ngIf="repitePwd?.hasError('passwordMismatch')">Las contraseñas no coinciden.</div>
+            </div>
+
+        </div>
+        <button class="btn btn-block text-center my-3">Actualizar cambios</button>
+        <div class="form-group text-center">
+            <button type="button" class="btn btn-outline-warning my-3" (click)="putInactive()">Estar inactivo</button>
+        </div>
+        <div class="form-group text-center">
+            <button type="button" class="btn btn-outline-danger my-3" (click)="deleteAccount()">Eliminar cuenta</button>
+        </div>
+    </div>
+</form>

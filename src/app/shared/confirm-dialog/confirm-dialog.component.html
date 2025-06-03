@@ -1,0 +1,6 @@
+<h2 class="letter-color-text letter-style-title position-relative" mat-dialog-title>{{ data.title }} <i class="bi bi-exclamation-triangle-fill fs-4 position-absolute end-0 top-50 translate-middle-y me-4"></i></h2>
+<mat-dialog-content class="letter-color-text">{{ data.message }}</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button class="letter-color-button letter-style-title" (click)="onCancel()">Cancelar</button>
+  <button mat-button class="letter-color-button letter-style-title" (click)="onConfirm()">Confirmar</button>
+</mat-dialog-actions>

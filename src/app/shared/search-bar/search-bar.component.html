@@ -1,0 +1,36 @@
+<div class="form-group py-2 d-flex align-items-center gap-2">
+    <div class="input-field flex-grow-1">
+        <span class="bi bi-search p-2"></span>
+        <input type="text" (input)="onInputChange($event)" [(ngModel)]="searchText" [placeholder]="placeholder" [ngClass]="inputClass"/>
+    </div>
+
+    <button *ngIf="(availableFilters?.length ?? 0) > 0" class="btn btn-outline-secondary btn-filter text-center my-3" [class.active]="showFilters" type="button" (click)="toggleFilters()">
+        <span class="bi bi-sliders">Filtros</span>
+    </button>
+</div>
+
+<!-- Filters -->
+<div *ngIf="showFilters && (availableFilters?.length ?? 0) > 0" class="mt-2 p-3 border rounded bg-light filter-style">
+    <div class="mb-2" *ngFor="let filter of availableTextFilters">
+        
+        <div class="input-field" >
+            <span class="bi bi-search p-2"></span>
+            <input [id]="filter.id" type="text" [placeholder]="filter.placeholder" [(ngModel)]="filters[filter.id]" (input)="emitSearch()"/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="mb-2 col-12 col-md-4" *ngFor="let filter of availableSelectFilters">
+            
+            <div class="input-field" >
+                <label  [for]="filter.id" class="form-label p-2"> {{filter.label }}: </label>
+                <select  [id]="filter.id" type="text" [(ngModel)]="filters[filter.id]" (change)="emitSearch()" class="form-control border-0">
+                    <option value="">Todos</option>
+                    <option *ngFor="let option of filter.options" [value]="option">{{option}}</option>
+                </select>
+                <span  class="bi bi-caret-down-fill p-2"></span>
+            </div>
+            
+        </div>
+    </div>
+</div>
