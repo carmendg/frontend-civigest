@@ -99,3 +99,14 @@ input{
         margin: 20px 0;
     }
 }
+
+.focus-item-list .dropdown-item.active{
+    background-color: #80D7FF !important;
+}
+
+.typeahead-libro-wrapper ~ ngb-typeahead-window .dropdown-item.active,
+.typeahead-libro-wrapper .dropdown-menu .dropdown-item.active {
+  background-color: #f0f8ff;
+  font-weight: bold;
+  color: #000;
+}

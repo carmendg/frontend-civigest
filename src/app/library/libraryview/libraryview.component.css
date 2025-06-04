@@ -152,4 +152,14 @@ input, textarea{
     align-items: flex-start !important;
 }
 
+.btn-add-view{
+    background-color: #80D7FF !important;
+    cursor: pointer;
+}
+
+.btn-add-view:hover{
+    background-color: #0B4A75 !important;
+    color:white;
+}
+
 

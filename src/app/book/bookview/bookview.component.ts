@@ -333,12 +333,12 @@ export class BookviewComponent implements OnInit{
   }
 
   viewCopyBook(){
-    console.log("Hacia los ejemplares") //Añadir id libro para filtrar!
+    console.log("Hacia los ejemplares")
     this.router.navigate(['/copybooklist'], { queryParams: { bookId: this.bookId } })
   }
 
   addCopyBook(){
-    console.log("Hacia nuevo ejemplar") //Añadir id libro
+    console.log("Hacia nuevo ejemplar")
     this.router.navigate(['/copybooknew'], { queryParams: { bookId: this.bookId } })
   }
 

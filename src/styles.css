@@ -110,3 +110,9 @@ main {
 .input-bg-style {
     background-color: #e6f7ff !important;
 }
+
+.dropdown-menu .dropdown-item.active {
+  background-color: #CCEFFF !important;
+  color: #000;
+  font-weight: bold;
+}

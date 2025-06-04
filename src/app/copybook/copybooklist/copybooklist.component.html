@@ -1,7 +1,7 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="text-center flex-grow-1 m-0">Lista de ejemplares</h1>
-        <span (click)="createCopybook()" class="bi bi-plus-circle-fill fs-3 text-primary" title="Añadir nuevo ejemplar"></span>
+        <span *ngIf="isLogged && !isClient" (click)="createCopybook()" class="bi bi-plus-circle-fill fs-3 text-primary" title="Añadir nuevo ejemplar"></span>
     </div>
     <h2 *ngIf="bookTitle !== ''" class="text-muted text-center pt-2">Mostrando del libro: <strong> {{bookTitle}} </strong></h2>
     <h2 *ngIf="libraryName !== ''" class="text-muted text-center pt-2">Mostrando de la biblioteca: <strong> {{libraryName}} </strong></h2>
@@ -15,12 +15,12 @@
     <table mat-table [dataSource]="dataSource" class="style-header-table style-table" matSort>
       <ng-container matColumnDef="title">
         <th class="" [ngClass]="'centered'" mat-header-cell *matHeaderCellDef mat-sort-header>Titulo</th>
-        <td mat-cell *matCellDef="let copybook">{{ copybook.book }}</td>
+        <td mat-cell *matCellDef="let copybook">{{ copybook.bookTitle }}</td>
       </ng-container>
   
       <ng-container matColumnDef="library">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Biblioteca</th>
-        <td mat-cell *matCellDef="let copybook">{{ copybook.library }}</td>
+        <td mat-cell *matCellDef="let copybook">{{ copybook.libraryName }}</td>
       </ng-container>
   
       <ng-container matColumnDef="status">

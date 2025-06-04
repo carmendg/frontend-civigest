@@ -273,6 +273,16 @@ export class LibraryviewComponent implements OnInit {
 
   }
 
+  viewCopyBook(){
+    console.log("Hacia los ejemplares")
+    this.router.navigate(['/copybooklist'], { queryParams: { libraryId: this.libraryId } })
+  }
+
+  addCopyBook(){
+    console.log("Hacia nuevo ejemplar")
+    this.router.navigate(['/copybooknew'], { queryParams: { libraryId: this.libraryId } })
+  }
+
   get email() {
     return this.libraryForm.get('email');
   }

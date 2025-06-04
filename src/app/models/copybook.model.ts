@@ -3,8 +3,8 @@ export interface CreateCopyBook {
     editionNum: string;
     purchaseDate: string;
     remarks: string;
-    bookId: number;
-    libraryId: number;
+    bookId: string;
+    libraryId: string;
 }
 
 export interface CopyBookDetails{

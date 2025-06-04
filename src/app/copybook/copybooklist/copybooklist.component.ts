@@ -22,6 +22,7 @@ import { BookService } from '../../services/book.service';
 import { LibraryService } from '../../services/library.service';
 import { HttpParams } from '@angular/common/http';
 import { SearchFilterDefinition } from '../../models/search-filter.model';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-copybooklist',
@@ -341,7 +342,7 @@ export class CopybooklistComponent implements OnInit, AfterViewInit {
   editCopybook(copybook: CopyBookDetails){
     console.log('Editar ejemplar',copybook);
     if(!this.checkIfCanEditOrDeleteUser(copybook)){
-      this.snackBar.open('No tienes permisos para editar este eje,mplar', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
+      this.snackBar.open('No tienes permisos para editar este ejemplar', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
     }
     else if(!this.checkIfCanEditDeleteOrReserve(copybook)){
       this.snackBar.open('No puedes editar este ejemplar no esta disponible', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
@@ -350,7 +351,42 @@ export class CopybooklistComponent implements OnInit, AfterViewInit {
 
   }
   deleteCopybook(copybook: CopyBookDetails){
-    console.log("Borrar ejemplar",copybook)
+    if(copybook.status === CopyBookStatus.booked){
+      this.snackBar.open('No puedes borrar este ejemplar. Está reservado', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
+    }
+    else if(!this.checkIfCanEditOrDeleteUser(copybook)){
+      this.snackBar.open('No tienes permisos para eliminar este ejemplar', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
+    }
+    else {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: '350px',
+        data: {
+          title: '¿Estás seguro?',
+          message: 'Vas a eliminar a este ejemplar del sistema. Esta acción no se puede deshacer.'
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.copybookService.deleteCopyBook(copybook.id.toString()).subscribe({
+            next:() =>{
+              this.snackBar.open('Ejemplar eliminado', 'Cerrar', {
+                duration: 5000,
+                panelClass: ['snackbar-success']
+              });
+              this.getListCopyBook();
+            },
+            error: (err) => {
+              console.error('Error al borrar el ejemplar:', err);
+              this.snackBar.open('Error al borrar el ejemplar', 'Cerrar', {
+                duration: 3000,
+                panelClass: ['snackbar-error']
+              });
+            }
+          })
+        }
+      });
+    }
 
   }
 
