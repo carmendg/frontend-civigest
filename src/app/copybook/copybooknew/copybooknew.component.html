@@ -50,20 +50,6 @@
         <div *ngIf="biblio?.hasError('required')">La biblioteca es obligatoria.</div>
     </div>
 
-    <!--<div class="form-group py-2">
-        <div class="input-field">
-            <label for="biblio" class="form-label p-2">Biblioteca: </label>
-            <select  formControlName="biblio" class="form-control border-0" name="biblio" id="biblio" (focus)="onFocus('biblio')">
-                <option *ngFor="let l of libraries" [value]="l.id">{{ l.name }}</option>
-            </select>
-            <span class="bi bi bi-buildings-fill p-2"></span>
-        </div>
-    </div>
-    <div *ngIf="formSent && !clearedErrors.has('estado') && estado?.invalid" class="text-danger">
-        <div *ngIf="estado?.hasError('required')">El estado es obligatorio.</div>
-        <div *ngIf="estado?.hasError('invalidEnumValue')">Debes introducir un valor correcto.</div>
-    </div>-->
-
     <button class="btn btn-block text-center my-3">Crear</button>
     
 </form>

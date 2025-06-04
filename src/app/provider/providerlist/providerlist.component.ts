@@ -176,7 +176,7 @@ export class ProviderlistComponent  implements OnInit, AfterViewInit {
             },
             error: (err) => {
               console.error('Error al borrar el proveedor:', err);
-              this.snackBar.open('Error al borrar la cuenta', 'Cerrar', {
+              this.snackBar.open('Error al borrar el proveedor', 'Cerrar', {
                 duration: 3000,
                 panelClass: ['snackbar-error']
               });

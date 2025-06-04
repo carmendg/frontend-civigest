@@ -285,46 +285,46 @@ export class BookviewComponent implements OnInit{
   }
 
   habilitarEdicion(): void {
-      if(this.checkIfCanEditOrDelete()){
-        this.editMode = true;
-  
-        //Aplicamos los validadores del título
-        this.bookForm.get('titulo')?.setValidators([
-          Validators.required, CustomValidators.nameValidator(), CustomValidators.requiredValidator() 
-        ]);
-        this.bookForm.get('titulo')?.updateValueAndValidity();
-  
-        //Aplicamos los validadores de la editorial
-        this.bookForm.get('editorial')?.setValidators([
-          Validators.required, CustomValidators.requiredValidator(), CustomValidators.nameValidator()
-        ]);
-        this.bookForm.get('editorial')?.updateValueAndValidity();
-  
-        //Aplicamos los validadores del número de páginas
-        this.bookForm.get('numpag')?.setValidators([
-          Validators.required, CustomValidators.requiredValidator(), CustomValidators.isValidNumPag() 
-        ]);
-        this.bookForm.get('numpag')?.updateValueAndValidity();
-  
-        //Aplicamos los validadores de la foto
-        this.bookForm.get('foto')?.setValidators([
-          Validators.required, CustomValidators.requiredValidator() 
-        ]);
-        this.bookForm.get('foto')?.updateValueAndValidity();
+    if(this.checkIfCanEditOrDelete()){
+      this.editMode = true;
 
-        //Aplicamos los validadores del resumen
-        this.bookForm.get('resumen')?.setValidators([
-          Validators.required, CustomValidators.requiredValidator(), CustomValidators.descripcionValidator() 
-        ]);
-        this.bookForm.get('resumen')?.updateValueAndValidity();
+      //Aplicamos los validadores del título
+      this.bookForm.get('titulo')?.setValidators([
+        Validators.required, CustomValidators.nameValidator(), CustomValidators.requiredValidator() 
+      ]);
+      this.bookForm.get('titulo')?.updateValueAndValidity();
 
-        //Aplicamos los validadores de los autores
-        this.bookForm.get('autores')?.setValidators([
-          Validators.required, CustomValidators.requiredValidator() 
-        ]);
-        this.bookForm.get('autores')?.updateValueAndValidity();
-      }
+      //Aplicamos los validadores de la editorial
+      this.bookForm.get('editorial')?.setValidators([
+        Validators.required, CustomValidators.requiredValidator(), CustomValidators.nameValidator()
+      ]);
+      this.bookForm.get('editorial')?.updateValueAndValidity();
+
+      //Aplicamos los validadores del número de páginas
+      this.bookForm.get('numpag')?.setValidators([
+        Validators.required, CustomValidators.requiredValidator(), CustomValidators.isValidNumPag() 
+      ]);
+      this.bookForm.get('numpag')?.updateValueAndValidity();
+
+      //Aplicamos los validadores de la foto
+      this.bookForm.get('foto')?.setValidators([
+        Validators.required, CustomValidators.requiredValidator() 
+      ]);
+      this.bookForm.get('foto')?.updateValueAndValidity();
+
+      //Aplicamos los validadores del resumen
+      this.bookForm.get('resumen')?.setValidators([
+        Validators.required, CustomValidators.requiredValidator(), CustomValidators.descripcionValidator() 
+      ]);
+      this.bookForm.get('resumen')?.updateValueAndValidity();
+
+      //Aplicamos los validadores de los autores
+      this.bookForm.get('autores')?.setValidators([
+        Validators.required, CustomValidators.requiredValidator() 
+      ]);
+      this.bookForm.get('autores')?.updateValueAndValidity();
     }
+  }
 
   goBack(){
     console.log("volviendo");

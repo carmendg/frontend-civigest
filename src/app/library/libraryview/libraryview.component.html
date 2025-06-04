@@ -63,7 +63,7 @@
         </div>
     </div>
 
-    <div class="form-group py-2">
+    <div class="form-group py-2" *ngIf="!isClient">
         <div class="input-field file-upload-field" [class.disabled]="!editMode">
             <span class="bi bi-image p-2"></span>
             <input type="file" accept="image/*" name="foto" id="foto" (focus)="onFocus('foto')" (change)="onImageSelected($event)" [disabled]="!editMode" [required]="editMode">

@@ -1,1 +1,93 @@
-<p>copybookview works!</p>
+<h1 class="text-center">Información del ejemplar del libro {{ title }} en la biblioteca {{ name }}</h1>
+<h2 class="text-muted text-center pt-2">Esta es la información que tenemos sobre ese ejemplar</h2>
+<p class="text-muted text-center pt-2" *ngIf="!isClient">El usuario creador es: {{ usernameCreatedBy }}</p>
+<form class="pt-3 wrapper" [formGroup]="copybookForm" (ngSubmit)="onSent()">
+
+    <div class="form-group py-2">
+        <div class="input-field disabled">
+            <span class="bi bi bi-buildings-fill p-2"></span>
+            <input type="text" placeholder="Nombre biblioteca" name="biblio" id="biblio" readonly formControlName="biblio">
+        </div>
+    </div>
+
+    <div class="form-group py-2">
+        <div class="input-field disabled">
+            <span class="bi bi bi-book-half p-2"></span>
+            <input type="text" placeholder="Título Libro " name="libro" id="libro" readonly formControlName="libro">
+        </div>
+    </div>
+
+    <div class="form-group py-2">
+        <div class="input-field disabled">
+            <span class="bi bi-bookmark-fill p-2"></span>
+            <input type="number" placeholder="Edición " name="edicion" id="edicion" readonly formControlName="edicion">
+        </div>
+    </div>
+
+    <div class="form-group py-2" *ngIf="!isClient">
+        <div class="input-field disabled">
+            <span class="bi bi-calendar-event-fill p-2"></span>
+            <input type="date" placeholder="Fecah creación" name="fecha" id="fecha" readonly formControlName="fecha">
+        </div>
+    </div>
+
+    <div class="form-group py-2">
+        <div class="input-field" [class.disabled]="!editMode">
+            <span class="bi bi-map-fill p-2"></span>
+            <input type="text" placeholder="Ubicación(pasillo, estantería, etc.)" name="ubicacion" id="ubicacion" formControlName="ubicacion" (focus)="onFocus('ubicacion')" [readonly]="!editMode" [required]="editMode">
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('ubicacion') && ubicacion?.invalid" class="text-danger">
+        <div *ngIf="ubicacion?.hasError('required')">La ubicación es obligatoria.</div>
+        <div *ngIf="ubicacion?.hasError('invalidName')">El formato de la ubicación no es correcto.</div>
+    </div>
+
+    <div class="form-group py-2" *ngIf="!isClient">
+        <div class="input-field input-field-top" [class.disabled]="!editMode">
+            <span class="bi bi-chat-left-fill p-2"></span>
+            <textarea placeholder="Comentarios" name="comentario" id="comentario" formControlName="comentario" rows="4" (focus)="onFocus('comentario')" [disabled]="!editMode" [required]="editMode"></textarea>
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('comentario') && comentario?.invalid" class="text-danger">
+        <div *ngIf="comentario?.hasError('required')">El comentario es obligatorio.</div>
+        <div *ngIf="comentario?.hasError('invalidDescription')">El formato del comentario es máximo 200.</div>
+    </div>
+
+    <div class="form-group py-2">
+        <div class="input-field" [class.disabled]="!editMode">
+            <label for="estado" class="form-label p-2">Estado: </label>
+            <input *ngIf="!editMode" type="text" [value]="estado?.value" name="estado" id="estado" readonly formControlName="estado" >
+            <select *ngIf="editMode" formControlName="estado" class="form-control border-0" name="estado" id="estado" [disabled]="!editMode" (focus)="onFocus('estado')">
+                <option *ngFor="let s of statuses" [value]="s.label">{{ s.label }}</option>
+            </select>
+            <span *ngIf="editMode" class="bi bi-caret-down-fill p-2"></span>
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('estado') && estado?.invalid" class="text-danger">
+        <div *ngIf="estado?.hasError('required')">El estado es obligatorio.</div>
+        <div *ngIf="estado?.hasError('invalidEnumValue')">Debes introducir un valor correcto.</div>
+    </div>
+
+    <div class="form-group py-2 text-center" *ngIf="canEditOrDelete">
+        <button type="button" class="btn btn-edit-mode text-center my-3" (click)="editMode ? deshabilitarEdicion() : habilitarEdicion()" >
+            {{ editMode ? 'Cancelar edición' : 'Modo edición' }}
+            <span *ngIf="editMode" class="bi bi-slash-circle p-2"></span>
+            <span *ngIf="!editMode" class="bi bi-pencil p-2"></span>
+        </button>
+    </div>
+
+
+    <button *ngIf="editMode" class="btn btn-block text-center my-3">Actualizar cambios</button>
+    <div class="form-group text-center" *ngIf="canEditOrDelete">
+        <button type="button" class="btn btn-outline-danger my-3" (click)="deleteCopyBook()">Borrar ejemplar</button>
+    </div>
+    <div class="form-group text-center" *ngIf="!canEditOrDelete">
+        <button type="button" class="btn btn-block text-center my-3" (click)="goBack()">Volver</button>
+    </div>
+       
+    
+</form>
+
+
+
+
