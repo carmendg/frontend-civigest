@@ -138,38 +138,53 @@ export class ProfileComponent implements OnInit{
       console.log("válido");
       console.log(this.userData)
       console.log('Datos del formulario:', this.profileForm.value);
-      const updatedUser = this.mapFormToUpdateUser();
-      console.log("Datos update", updatedUser)
-      const userId= this.authService.getUserIdFromToken();
-      if(userId){
-        this.userService.updateUser(userId, updatedUser).subscribe({
-          next:() =>{
-            console.log("done");
-            this.snackBar.open('Datos actualizados correctamente.', 'Cerrar', {
-              duration: 3000,
-              panelClass: ['snackbar-success']
-            });
-            this.router.navigate(['/profile']);
-          },
-          error: (err) => {
-            console.error('Error al actualizar el perfil:', err);
-            this.snackBar.open('Error al actualizar los datos.', 'Cerrar', {
-              duration: 3000,
-              panelClass: ['snackbar-error']
-            });
-          }
-        })
-      }
-      else{
-        //ERROR TOKEN
-        this.snackBar.open('No se ha podido identificar al usuario.', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
-      }
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: '350px',
+        data: {
+          title: 'Confirma actualización',
+          message: '¿Estás seguro de que quieres actualizar tus datos?.\nEsta acción no se puede deshacer.'
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.updateProfile();
+        }
+      });
     }
     else{
       console.log("no valido");
       this.profileForm.markAllAsTouched();
     }
 
+  }
+  private updateProfile(){
+    const updatedUser = this.mapFormToUpdateUser();
+    console.log("Datos update", updatedUser)
+    const userId= this.authService.getUserIdFromToken();
+    if(userId){
+      this.userService.updateUser(userId, updatedUser).subscribe({
+        next:() =>{
+          console.log("done");
+          this.snackBar.open('Datos actualizados correctamente.', 'Cerrar', {
+            duration: 3000,
+            panelClass: ['snackbar-success']
+          });
+          this.router.navigate(['/profile']);
+        },
+        error: (err) => {
+          console.error('Error al actualizar el perfil:', err);
+          this.snackBar.open('Error al actualizar los datos.', 'Cerrar', {
+            duration: 3000,
+            panelClass: ['snackbar-error']
+          });
+        }
+      })
+    }
+    else{
+      //ERROR TOKEN
+      this.snackBar.open('No se ha podido identificar al usuario.', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
+    }
   }
 
 

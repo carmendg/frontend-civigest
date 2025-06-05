@@ -32,6 +32,7 @@ export class LibrarynewComponent {
         telefono: ['',[Validators.required, CustomValidators.requiredValidator(), CustomValidators.phoneValidator()] ],
         direccion: ['',[Validators.required, CustomValidators.requiredValidator(), CustomValidators.addressValidator()] ],
         foto:['',[Validators.required]],
+        numplantas: ['',[Validators.required, CustomValidators.isPositiveOrZeroNumber()] ],
         fotoMimeType:['']
       });
   }
@@ -82,7 +83,8 @@ export class LibrarynewComponent {
       address: v.direccion,
       description: v.descripcion,
       photo: v.foto,
-      photoMimeType: v.fotoMimeType
+      photoMimeType: v.fotoMimeType,
+      floorNumbers: v.numplantas
     };
   }
 
@@ -132,6 +134,10 @@ export class LibrarynewComponent {
 
   get direccion() {
     return this.libraryForm.get('direccion');
+  }
+
+  get numplantas(){
+    return this.libraryForm.get('numplantas');
   }
 
 

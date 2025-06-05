@@ -6,7 +6,8 @@ export interface CreateLibrary {
     phoneNumber: string;
     address: string;
     photo: string;
-    photoMimeType: string
+    photoMimeType: string;
+    floorNumbers: string;
 }
 
 export interface LibraryDetails{
@@ -21,6 +22,7 @@ export interface LibraryDetails{
     usernameCreatedBy?: string;
     photo: string;
     photoMimeType: string;
+    floorNumbers: string;
 }
 
 export interface LibrarySearchParams{

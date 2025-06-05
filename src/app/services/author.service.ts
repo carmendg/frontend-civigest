@@ -46,7 +46,7 @@ export class AuthorService {
     return this.http.delete(`${ApiBaseUrls.authors}/${id}`, {headers});
   }
 
-  updateBook(id:string, author:AuthorDetails):Observable<any>{
+  updateAuthor(id:string, author:AuthorDetails):Observable<any>{
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization' : `Bearer ${token}`

@@ -67,6 +67,17 @@
     </div>
 
     <div class="form-group py-2">
+        <div class="input-field">
+            <span class="bi bi-list-ol p-2"></span>
+            <input type="number" placeholder="Número de plantas" name="numplantas" id="numplantas" required formControlName="numplantas" (focus)="onFocus('numplantas')">
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('numplantas') && numplantas?.invalid" class="text-danger">
+        <div *ngIf="numplantas?.hasError('required')">El número de edición es obligatorio.</div>
+        <div *ngIf="numplantas?.hasError('invalidNumber')">El número de edición debe ser mayor que cero.</div>
+    </div>
+
+    <div class="form-group py-2">
         <div class="input-field input-field-top">
             <span class="bi bi-file-text-fill p-2"></span>
             <textarea placeholder="Descripción" name="descripcion" id="descripcion" required formControlName="descripcion" rows="4" (focus)="onFocus('descripcion')"></textarea>

@@ -147,37 +147,53 @@ export class UserviewComponent implements OnInit{
       console.log("válido");
       console.log(this.userData)
       console.log('Datos del formulario:', this.userForm.value);
-      const updatedUser = this.mapFormToUpdateUser();
-      console.log("Datos update", updatedUser)
-      const userId= this.authService.getUserIdFromToken();
-      if(userId){
-        this.userService.updateUser(userId, updatedUser).subscribe({
-          next:() =>{
-            console.log("done");
-            this.snackBar.open('Se ha actualizado correctamente al usuario.', 'Cerrar', {
-              duration: 3000,
-              panelClass: ['snackbar-success']
-            });
-            this.router.navigate(['/userlist']);
-          },
-          error: (err) => {
-            console.error('Error al actualizar el usuario:', err);
-            this.snackBar.open('Error al actualizar el usuario.', 'Cerrar', {
-              duration: 3000,
-              panelClass: ['snackbar-error']
-            });
-          }
-        })
-      }
-      else{
-        this.snackBar.open('No se ha podido identificar al usuario.', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
-      }
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: '350px',
+        data: {
+          title: 'Confirma actualización',
+          message: '¿Estás seguro de que quieres actualizar este usuario?.\nEsta acción no se puede deshacer.'
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.updateUser();
+        }
+      });
     }
     else{
       console.log("no valido");
       this.userForm.markAllAsTouched();
     }
 
+  }
+
+  private updateUser(){
+    const updatedUser = this.mapFormToUpdateUser();
+    console.log("Datos update", updatedUser)
+    const userId= this.authService.getUserIdFromToken();
+    if(userId){
+      this.userService.updateUser(userId, updatedUser).subscribe({
+        next:() =>{
+          console.log("done");
+          this.snackBar.open('Se ha actualizado correctamente al usuario.', 'Cerrar', {
+            duration: 3000,
+            panelClass: ['snackbar-success']
+          });
+          this.router.navigate(['/userlist']);
+        },
+        error: (err) => {
+          console.error('Error al actualizar el usuario:', err);
+          this.snackBar.open('Error al actualizar el usuario.', 'Cerrar', {
+            duration: 3000,
+            panelClass: ['snackbar-error']
+          });
+        }
+      })
+    }
+    else{
+      this.snackBar.open('No se ha podido identificar al usuario.', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
+    }
   }
 
   habilitarEdicion(): void {

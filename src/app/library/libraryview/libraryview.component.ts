@@ -44,7 +44,8 @@ export class LibraryviewComponent implements OnInit {
       direccion:  ['' ],
       foto: [''],
       fotoMimeType: [''],
-      cif: [{value: '', disabled:true} ]
+      cif: [{value: '', disabled:true} ],
+      numplantas:['']
     },);
   }
 
@@ -89,7 +90,8 @@ export class LibraryviewComponent implements OnInit {
       direccion: library.address,
       foto: library.photo,
       fotoMimeType: library.photoMimeType,
-      cif: library.cif
+      cif: library.cif,
+      numplantas: library.floorNumbers,
     });
   }
 
@@ -150,31 +152,47 @@ export class LibraryviewComponent implements OnInit {
       console.log("válido");
       console.log(this.libraryData)
       console.log('Datos del formulario:', this.libraryForm.value);
-      const updatedLibrary = this.mapFormToUpdateLibrary();
-      console.log("Datos update", updatedLibrary)
-      this.libraryService.updateLibrary(this.libraryId, updatedLibrary).subscribe({
-        next:() =>{
-          console.log("done");
-          this.snackBar.open('Se ha actualizado correctamente a la biblioteca.', 'Cerrar', {
-            duration: 3000,
-            panelClass: ['snackbar-success']
-          });
-          this.router.navigate(['/librarylist']);
-        },
-        error: (err) => {
-          console.error('Error al actualizar la biblioteca:', err);
-          this.snackBar.open('Error al actualizar la biblioteca.', 'Cerrar', {
-            duration: 3000,
-            panelClass: ['snackbar-error']
-          });
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: '350px',
+        data: {
+          title: 'Confirma actualización',
+          message: '¿Estás seguro de que quieres actualizar esta biblioteca?.\nEsta acción no se puede deshacer.'
         }
-      })
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.updateLibrary();
+        }
+      });
     }
     else{
       console.log("no valido");
       this.libraryForm.markAllAsTouched();
     }
 
+  }
+
+  private updateLibrary(){
+    const updatedLibrary = this.mapFormToUpdateLibrary();
+    console.log("Datos update", updatedLibrary)
+    this.libraryService.updateLibrary(this.libraryId, updatedLibrary).subscribe({
+      next:() =>{
+        console.log("done");
+        this.snackBar.open('Se ha actualizado correctamente a la biblioteca.', 'Cerrar', {
+          duration: 3000,
+          panelClass: ['snackbar-success']
+        });
+        this.router.navigate(['/librarylist']);
+      },
+      error: (err) => {
+        console.error('Error al actualizar la biblioteca:', err);
+        this.snackBar.open('Error al actualizar la biblioteca.', 'Cerrar', {
+          duration: 3000,
+          panelClass: ['snackbar-error']
+        });
+      }
+    })
   }
 
   checkIfCanEditOrDelete(): boolean{
@@ -191,44 +209,53 @@ export class LibraryviewComponent implements OnInit {
       this.editMode = true;
 
       //Aplicamos los validadores de la descripción
-      this.libraryForm.get('descripcion')?.setValidators([
+      this.descripcion?.setValidators([
         Validators.required, CustomValidators.descripcionValidator(), CustomValidators.requiredValidator() 
       ]);
-      this.libraryForm.get('descripcion')?.updateValueAndValidity();
+      this.descripcion?.updateValueAndValidity();
 
       //Aplicamos los validadores del telefono
-      this.libraryForm.get('telefono')?.setValidators([
+      this.telefono?.setValidators([
         Validators.required, CustomValidators.phoneValidator(), CustomValidators.requiredValidator()
       ]);
-      this.libraryForm.get('telefono')?.updateValueAndValidity();
+      this.telefono?.updateValueAndValidity();
 
       //Aplicamos los validadores de la dirección
-      this.libraryForm.get('direccion')?.setValidators([
+      this.direccion?.setValidators([
         Validators.required, CustomValidators.addressValidator(), CustomValidators.requiredValidator() 
       ]);
-      this.libraryForm.get('direccion')?.updateValueAndValidity();
+      this.direccion?.updateValueAndValidity();
 
       //Aplicamos los validadores de la foto
-      this.libraryForm.get('foto')?.setValidators([
+      this.foto?.setValidators([
         Validators.required, CustomValidators.requiredValidator() 
       ]);
-      this.libraryForm.get('foto')?.updateValueAndValidity();
+      this.foto?.updateValueAndValidity();
+
+      //Aplicamos los validadores del número de planta
+      this.numplantas?.setValidators([
+        Validators.required, CustomValidators.isPositiveOrZeroNumber()
+      ]);
+      this.numplantas?.updateValueAndValidity()
     }
   }
 
   deshabilitarEdicion(): void {
     this.editMode = false;
-    this.libraryForm.get('descripcion')?.clearValidators();
-    this.libraryForm.get('descripcion')?.updateValueAndValidity();
+    this.descripcion?.clearValidators();
+    this.descripcion?.updateValueAndValidity();
 
-    this.libraryForm.get('telefono')?.clearValidators();
-    this.libraryForm.get('telefono')?.updateValueAndValidity();
+    this.telefono?.clearValidators();
+    this.telefono?.updateValueAndValidity();
 
-    this.libraryForm.get('direccion')?.clearValidators();
-    this.libraryForm.get('direccion')?.updateValueAndValidity();
+    this.direccion?.clearValidators();
+    this.direccion?.updateValueAndValidity();
 
-    this.libraryForm.get('foto')?.clearValidators();
-    this.libraryForm.get('foto')?.updateValueAndValidity();
+    this.foto?.clearValidators();
+    this.foto?.updateValueAndValidity();
+
+    this.numplantas?.clearValidators();
+    this.numplantas?.updateValueAndValidity();
   }
   
   private mapFormToUpdateLibrary() {
@@ -239,6 +266,7 @@ export class LibraryviewComponent implements OnInit {
     if (v.contacto !== this.libraryData.description) updatedLibrary.description = v.descripcion;
     if (v.telefono !== this.libraryData.phoneNumber) updatedLibrary.phoneNumber = v.telefono;
     if (v.direccion !== this.libraryData.address) updatedLibrary.address = v.direccion;
+    if (v.numplantas !== this.libraryData.floorNumbers) updatedLibrary.floorNumbers = v.numplantas;
     if (v.foto !== this.libraryData.photo){
       updatedLibrary.photo = v.foto;
       updatedLibrary.photoMimeType = v.fotoMimeType
@@ -303,6 +331,9 @@ export class LibraryviewComponent implements OnInit {
     return this.libraryForm.get('foto');
   }
 
+  get numplantas(){
+    return this.libraryForm.get('numplantas');
+  }
 
   get direccion() {
     return this.libraryForm.get('direccion');

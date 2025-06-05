@@ -138,31 +138,47 @@ export class ProviderviewComponent implements OnInit {
       console.log("válido");
       console.log(this.providerData)
       console.log('Datos del formulario:', this.providerForm.value);
-      const updatedProvider = this.mapFormToUpdateProvider();
-      console.log("Datos update", updatedProvider)
-      this.providerService.updateProvider(this.providerId, updatedProvider).subscribe({
-        next:() =>{
-          console.log("done");
-          this.snackBar.open('Se ha actualizado correctamente al usuario.', 'Cerrar', {
-            duration: 3000,
-            panelClass: ['snackbar-success']
-          });
-          this.router.navigate(['/providerlist']);
-        },
-        error: (err) => {
-          console.error('Error al actualizar el usuario:', err);
-          this.snackBar.open('Error al actualizar el usuario.', 'Cerrar', {
-            duration: 3000,
-            panelClass: ['snackbar-error']
-          });
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: '350px',
+        data: {
+          title: 'Confirma actualización',
+          message: '¿Estás seguro de que quieres actualizar este proveedor?.\nEsta acción no se puede deshacer.'
         }
-      })
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.updateProvider();
+        }
+      });
     }
     else{
       console.log("no valido");
       this.providerForm.markAllAsTouched();
     }
 
+  }
+
+  private updateProvider(){
+    const updatedProvider = this.mapFormToUpdateProvider();
+    console.log("Datos update", updatedProvider)
+    this.providerService.updateProvider(this.providerId, updatedProvider).subscribe({
+      next:() =>{
+        console.log("done");
+        this.snackBar.open('Se ha actualizado correctamente al usuario.', 'Cerrar', {
+          duration: 3000,
+          panelClass: ['snackbar-success']
+        });
+        this.router.navigate(['/providerlist']);
+      },
+      error: (err) => {
+        console.error('Error al actualizar el usuario:', err);
+        this.snackBar.open('Error al actualizar el usuario.', 'Cerrar', {
+          duration: 3000,
+          panelClass: ['snackbar-error']
+        });
+      }
+    })
   }
 
   checkIfCanEditOrDelete(): boolean{

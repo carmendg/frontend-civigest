@@ -233,4 +233,15 @@ export function isValidNumPag(): ValidatorFn {
   };
 }
 
+export function isPositiveOrZeroNumber(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if(control.value == null || control.value === '') return null;
+    let numpag = Number(control.value);
+    if (isNaN(numpag) || numpag < 0){
+      return {invalidNumber: true}
+    }
+    return null;
+  };
+}
+
   
