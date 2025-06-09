@@ -73,8 +73,8 @@
         </div>
     </div>
     <div *ngIf="formSent && !clearedErrors.has('numplantas') && numplantas?.invalid" class="text-danger">
-        <div *ngIf="numplantas?.hasError('required')">El número de edición es obligatorio.</div>
-        <div *ngIf="numplantas?.hasError('invalidNumber')">El número de edición debe ser mayor que cero.</div>
+        <div *ngIf="numplantas?.hasError('required')">El número de las plantas es obligatorio.</div>
+        <div *ngIf="numplantas?.hasError('invalidNumber')">El número de plantas debe ser mayor que cero.</div>
     </div>
 
     <div class="form-group py-2">

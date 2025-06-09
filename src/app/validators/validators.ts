@@ -244,4 +244,15 @@ export function isPositiveOrZeroNumber(): ValidatorFn {
   };
 }
 
+export function isValidFloorNumber(validFloors: number[]): ValidatorFn{
+  return (control: AbstractControl): ValidationErrors | null => {
+    if(control.value == null || control.value === '') return null;
+    let floor = Number(control.value);
+    if(isNaN(floor) || !validFloors.includes(floor)){
+      return {invalidFloor: true}
+    }
+    return null;
+  }
+}
+
   

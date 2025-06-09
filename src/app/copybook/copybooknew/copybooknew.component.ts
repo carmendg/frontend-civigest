@@ -64,13 +64,9 @@ export class CopybooknewComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.bookService.getBookList(this.bookSearchParams).subscribe(book =>{ this.filteredBooks= book.items
-      console.log("algo", this.filteredBooks);
-    });
+    this.bookService.getBookList(this.bookSearchParams).subscribe(book =>{ this.filteredBooks= book.items });
 
-    this.libraryService.getLibraryList(this.librarySearchParams).subscribe(library => { this.filteredLibraries = library.items
-      console.log("biblio", this.filteredLibraries);
-    });
+    this.libraryService.getLibraryList(this.librarySearchParams).subscribe(library => { this.filteredLibraries = library.items });
 
     this.activatedRoute.params.subscribe(params => {
       const bookIdParam = this.activatedRoute.snapshot.queryParamMap.get('bookId');

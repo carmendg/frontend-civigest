@@ -1,0 +1,87 @@
+<h1 class="text-center">Nuevo asiento</h1>
+<h2 class="text-muted text-center pt-2">Cumplimenta el formulario para registrar un asiento en el sistema</h2>
+<form class="pt-3 wrapper" [formGroup]="seatForm" (ngSubmit)="onSent()">
+    <div class="form-group py-2">
+        <div class="input-field">
+            <label for="biblio" class="form-label p-2">Biblioteca: </label>
+            <input type="text" class="form-control border-0 focus-item-list" [ngbTypeahead]="searchLibraries" [resultFormatter]="libraryFormatter" [inputFormatter]="libraryInputFormatter"
+                    (selectItem)="onLibrarySelected($event)" (focus)="libraryFocus$.next($any($event).target.value)" formControlName="biblio" placeholder="Busca por nombre"
+                    required id="biblio" name="biblio" #libraryInstance="ngbTypeahead" #libraryInput (blur)="validateLibraryInput()" [focusFirst]="false" />    
+            <span class="bi bi bi-buildings-fill p-2"></span>
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('biblio') && biblio?.invalid" class="text-danger">
+        <div *ngIf="biblio?.hasError('required')">La biblioteca es obligatoria.</div>
+    </div>
+
+    <div *ngIf="biblioSelected">
+
+        <div class="form-group py-2">
+            <div class="input-field">
+                <label for="planta" class="form-label p-2">Planta: </label>
+                <select formControlName="planta" class="form-control border-0" name="planta" id="planta"  (focus)="onFocus('planta')">
+                    <option *ngFor="let floor of floorNumberList" [value]="floor">{{ floor }}</option>
+                </select>
+                <span class="bi bi-list-ol p-2"></span>
+            </div>
+        </div>
+        <div *ngIf="formSent && !clearedErrors.has('planta') && planta?.invalid" class="text-danger">
+            <div *ngIf="planta?.hasError('required')">El estado es obligatorio.</div>
+            <div *ngIf="planta?.hasError('isValidFloorNumber')">Debes introducir un valor correcto.</div>
+        </div>
+
+        <div class="form-group py-2">
+            <div class="input-field">
+                <span class="bi bi-list-ol p-2"></span>
+                <input type="number" placeholder="Número de sala" name="sala" id="sala" required formControlName="sala" (focus)="onFocus('sala')">
+            </div>
+        </div>
+        <div *ngIf="formSent && !clearedErrors.has('sala') && sala?.invalid" class="text-danger">
+            <div *ngIf="sala?.hasError('required')">El número de la sala es obligatorio.</div>
+            <div *ngIf="sala?.hasError('invalidNumber')">El número de sala debe ser mayor que cero.</div>
+        </div>
+
+        <div class="form-group py-2">
+            <div class="input-field">
+                <span class="bi bi-list-ol p-2"></span>
+                <input type="number" placeholder="Número de asiento" name="asiento" id="asiento" required formControlName="asiento" (focus)="onFocus('asiento')">
+            </div>
+        </div>
+        <div *ngIf="asiento && !clearedErrors.has('asiento') && asiento.invalid" class="text-danger">
+            <div *ngIf="asiento?.hasError('required')">El número del asiento es obligatorio.</div>
+            <div *ngIf="asiento?.hasError('invalidNumber')">El número del asiento debe ser mayor que cero.</div>
+        </div>
+        
+
+        <div class="d-flex justify-content-center gap-4 ">
+            <div class="form-group py-2">
+                <div class="input-field d-flex align-items-center">
+                    <span class="bi bi-layout-split p-2"></span>
+                    <label for="ventana" class="form-label p-2">¿Ventana? </label>
+                    <input type="checkbox" placeholder="ventana " name="ventana" id="ventana" formControlName="ventana" (focus)="onFocus('ventana')">
+                </div>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field d-flex align-items-center">
+                    <span class="bi bi-badge-wc p-2"></span>
+                    <label for="wc" class="form-label p-2">¿WC cerca? </label>
+                    <input type="checkbox" placeholder="wc " name="wc" id="wc" formControlName="wc" (focus)="onFocus('wc')">
+                </div>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field d-flex align-items-center">
+                    <span class="bi bi-outlet p-2"></span>
+                    <label for="enchufe" class="form-label p-2">¿Enchufe? </label>
+                    <input type="checkbox" placeholder="enchufe " name="enchufe" id="enchufe" formControlName="enchufe" (focus)="onFocus('enchufe')">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+
+    <button class="btn btn-block text-center my-3">Crear</button>
+    
+</form>

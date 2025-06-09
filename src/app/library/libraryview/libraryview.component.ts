@@ -311,6 +311,16 @@ export class LibraryviewComponent implements OnInit {
     this.router.navigate(['/copybooknew'], { queryParams: { libraryId: this.libraryId } })
   }
 
+  viewSeat(){
+    console.log("Hacia los asientos")
+    this.router.navigate(['/seatlist'], { queryParams: { libraryId: this.libraryId } })
+  }
+
+  addSeat(){
+    console.log("Hacia nuevo asiento")
+    this.router.navigate(['/seatnew'], { queryParams: { libraryId: this.libraryId } })
+  }
+
   get email() {
     return this.libraryForm.get('email');
   }

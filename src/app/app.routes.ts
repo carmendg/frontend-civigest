@@ -20,6 +20,9 @@ import { BooknewComponent } from './book/booknew/booknew.component';
 import { CopybooklistComponent } from './copybook/copybooklist/copybooklist.component';
 import { CopybookviewComponent } from './copybook/copybookview/copybookview.component';
 import { CopybooknewComponent } from './copybook/copybooknew/copybooknew.component';
+import { SeatlistComponent } from './seat/seatlist/seatlist.component';
+import { SeatviewComponent } from './seat/seatview/seatview.component';
+import { SeatnewComponent } from './seat/seatnew/seatnew.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
@@ -44,6 +47,10 @@ export const routes: Routes = [
     { path: 'copybooklist', component:CopybooklistComponent},
     { path: 'copybookview/:id', component:CopybookviewComponent},
     { path: 'copybooknew', component:CopybooknewComponent, canActivate:[AuthGuard, RoleGuard]},
+    //SEAT
+    { path: 'seatlist', component:SeatlistComponent},
+    { path: 'seatview/:id', component:SeatviewComponent},
+    { path: 'seatnew', component:SeatnewComponent, canActivate:[AuthGuard, RoleGuard]},
 
     { path: '', component: HomeComponent }
   ];
