@@ -22,7 +22,7 @@
                 <select formControlName="planta" class="form-control border-0" name="planta" id="planta"  (focus)="onFocus('planta')">
                     <option *ngFor="let floor of floorNumberList" [value]="floor">{{ floor }}</option>
                 </select>
-                <span class="bi bi-list-ol p-2"></span>
+                <span class="bi bi-grip-vertical p-2"></span>
             </div>
         </div>
         <div *ngIf="formSent && !clearedErrors.has('planta') && planta?.invalid" class="text-danger">
@@ -43,7 +43,7 @@
 
         <div class="form-group py-2">
             <div class="input-field">
-                <span class="bi bi-list-ol p-2"></span>
+                <span class="material-icons p-2">event_seat</span>
                 <input type="number" placeholder="Número de asiento" name="asiento" id="asiento" required formControlName="asiento" (focus)="onFocus('asiento')">
             </div>
         </div>

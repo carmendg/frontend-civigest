@@ -1,4 +1,4 @@
-<h1 class="text-center">Información del ejemplar del libro {{ title }} en la biblioteca {{ name }}</h1>
+<h1 class="text-center">Información del ejemplar</h1>
 <h2 class="text-muted text-center pt-2">Esta es la información que tenemos sobre ese ejemplar</h2>
 <p class="text-muted text-center pt-2" *ngIf="!isClient">El usuario creador es: {{ usernameCreatedBy }}</p>
 <form class="pt-3 wrapper" [formGroup]="copybookForm" (ngSubmit)="onSent()">

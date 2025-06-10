@@ -34,3 +34,18 @@ input{
     margin-bottom: 2%;
 }
 
+.input-field select {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.input-field label {
+  white-space: nowrap;
+  margin: 0;
+}
+
+.input-field .form-select {
+  border: none;
+  outline: none;
+  width: 100%;
+}

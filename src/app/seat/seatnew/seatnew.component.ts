@@ -223,7 +223,7 @@ export class SeatnewComponent implements OnInit{
     return this.seatForm.get('wc');
   }
   get asiento(){
-    return this.seatForm.get('aseinto');
+    return this.seatForm.get('asiento');
   }
 
 }

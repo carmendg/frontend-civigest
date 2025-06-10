@@ -30,6 +30,7 @@ export class LibraryviewComponent implements OnInit {
   canEditOrDelete = false;
   usernameCreatedBy: string = '';
   isClient = true;
+  isLogged = false;
 
   constructor( private formbuilder: FormBuilder, private libraryService: LibraryService, private userService: UserService, 
                 private router: Router, private authService: AuthService, private snackBar: MatSnackBar,
@@ -64,6 +65,7 @@ export class LibraryviewComponent implements OnInit {
               this.usernameCreatedBy = library.usernameCreatedBy;
               this.canEditOrDelete = this.checkIfCanEditOrDelete();
               this.isClient = this.checkIfClientUser();
+              this.isLogged = this.checkIfIsLogged();
               if(!this.canEditOrDelete) this.editMode=false;
               if(this.editMode) this.habilitarEdicion();
             },
@@ -140,6 +142,12 @@ export class LibraryviewComponent implements OnInit {
     const userrole= this.authService.getRoleFromToken();
     if(userrole && (userrole === Role.admin || userrole === Role.gestor)) return false;
     return true;
+  }
+
+  checkIfIsLogged(): boolean{
+    const userid= this.authService.getUserIdFromToken();
+    if(userid) return true;
+    return false;
   }
 
 
@@ -319,6 +327,10 @@ export class LibraryviewComponent implements OnInit {
   addSeat(){
     console.log("Hacia nuevo asiento")
     this.router.navigate(['/seatnew'], { queryParams: { libraryId: this.libraryId } })
+  }
+
+  reserveSeat(){
+    console.log("Hacia la reserva")
   }
 
   get email() {

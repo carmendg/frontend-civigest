@@ -36,6 +36,7 @@ export interface SeatSearchParams{
     nelem: number;
     status?: string;
     libraryId?: number;
+    library?: string;
     floorNum?: boolean;
     roomNum?: boolean;
     hasWindow?: boolean;

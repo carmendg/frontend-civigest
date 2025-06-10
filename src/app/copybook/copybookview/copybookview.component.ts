@@ -26,8 +26,6 @@ export class CopybookviewComponent implements OnInit {
   copybookData!: CopyBookDetails;
   formSent = false;
   clearedErrors: Set<string> = new Set();
-  title: string = '';
-  name:string ='';
   copybookId: string = '';
   editMode = false;
   canEditOrDelete = false;
@@ -278,8 +276,8 @@ export class CopybookviewComponent implements OnInit {
         this.location.back();
       },
       error: (err) => {
-        console.error('Error al actualizar el libro:', err);
-        this.snackBar.open('Error al actualizar el libro.', 'Cerrar', {
+        console.error('Error al actualizar el ejemplar:', err);
+        this.snackBar.open('Error al actualizar el ejemplar.', 'Cerrar', {
           duration: 3000,
           panelClass: ['snackbar-error']
         });

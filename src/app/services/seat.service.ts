@@ -54,6 +54,7 @@ export class SeatService {
     if (request.roomNum) params = params.set('salaNum', request.roomNum);
     if (request.isWCNear) params = params.set('wcCerca', request.isWCNear);
     if (request.hasSocket) params = params.set('hayEnchufe', request.hasSocket);
+    if (request.library) params = params.set('biblio', request.library);
 
     if (request.orderBy) params = params.set('orden', request.orderBy);
     if (request.orderField) params = params.set('campoOrden', request.orderField);
@@ -61,13 +62,46 @@ export class SeatService {
     return this.http.get<PagedResponse<SeatDetails>>(`${ApiBaseUrls.seats}/`, {params: params });
   }
 
-  getFilterSeatList(): SearchFilterDefinition[] { // <--- REVISAR!
+  getFilterSeatList(): SearchFilterDefinition[] {
       let filters: SearchFilterDefinition[] =[
         {//Status
           id:'status_search',
           label:'Estado',
           type:'select',
           options: Object.values(SeatStatus),
+          placeholder:''
+        },
+        {//Planta
+          id:'floor_search',
+          label:'',
+          placeholder:'Buscar por planta...',
+          type:'text',
+        },
+        {//Room
+          id:'room_search',
+          label:'',
+          placeholder:'Buscar por sala...',
+          type:'text',
+        },
+        {//Windows
+          id:'windows_search',
+          label:'¿Ventana?',
+          type:'select',
+          options: ['Con ventana', 'Sin ventana'],
+          placeholder:''
+        },
+        {//WC
+          id:'wc_search',
+          label:'¿WC cerca?',
+          type:'select',
+          options: ['Baño cerca', 'Baño lejos'],
+          placeholder:''
+        },
+        {//Socket
+          id:'socket_search',
+          label:'¿Enchufe?',
+          type:'select',
+          options: ['Con enchufe', 'Sin enchufe'],
           placeholder:''
         },
       ];
