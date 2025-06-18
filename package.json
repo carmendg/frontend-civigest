@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --output-path dist/civigest --configuration development",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:civigest": "node dist/civigest/server/server.mjs"

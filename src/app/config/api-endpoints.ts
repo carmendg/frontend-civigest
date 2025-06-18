@@ -1,10 +1,14 @@
 export const ApiBaseUrls = {
-    auth: 'https://localhost:44309/api/auth',
-    users: 'https://localhost:44319/api/users',
-    providers: 'https://localhost:44319/api/providers',
-    libraries: 'https://localhost:44389/api/libraries',
-    books: 'https://localhost:44389/api/books',
-    authors: 'https://localhost:44389/api/authors',
-    copybooks: 'https://localhost:44389/api/books/copybooks',
-    seats: 'https://localhost:44307/api/Seats'
+  // AuthUtility
+    auth: 'http://localhost:44309/api/auth',
+  // Basic
+    users: 'http://localhost:44319/api/users',
+    providers: 'http://localhost:44319/api/providers',
+  // Library
+    libraries: 'http://localhost:44389/api/libraries',
+    books: 'http://localhost:44389/api/books',
+    authors: 'http://localhost:44389/api/authors',
+    copybooks: 'http://localhost:44389/api/books/copybooks',
+  // member
+    seats: 'http://localhost:44307/api/seats'
   };
