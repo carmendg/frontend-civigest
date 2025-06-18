@@ -1,76 +1,72 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { SearchBarComponent } from '../../shared/search-bar/search-bar.component';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { SearchBarComponent } from '../../shared/search-bar/search-bar.component';
 import { CommonModule } from '@angular/common';
 import { getSpanishPaginatorIntl } from '../../shared/spanish-paginator-intl';
-import { CopyBookDetails, CopyBookSearchParams, CopyBookStatus } from '../../models/copybook.model';
+import { ReserveDetails, ReserveSearchParams, ReserveStatus } from '../../models/reserve.model';
+import { SearchFilterDefinition } from '../../models/search-filter.model';
 import { PagedResponse } from '../../models/paged-response.model';
-import { CopybookService } from '../../services/copybook.service';
+import { ReserveService } from '../../services/reserve.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../../services/auth.service';
-import { UserService } from '../../services/user.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Role } from '../../models/user.model';
-import { BookService } from '../../services/book.service';
+import { UserService } from '../../services/user.service';
 import { LibraryService } from '../../services/library.service';
-import { HttpParams } from '@angular/common/http';
-import { SearchFilterDefinition } from '../../models/search-filter.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Role } from '../../models/user.model';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
-  selector: 'app-copybooklist',
+  selector: 'app-reservelist',
   imports: [CommonModule, MatTableModule, MatPaginatorModule, MatButtonModule, MatIconModule, MatSortModule, MatProgressSpinnerModule, MatInputModule, SearchBarComponent],
   providers: [ { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() } ],
-  templateUrl: './copybooklist.component.html',
-  styleUrl: './copybooklist.component.css'
+  templateUrl: './reservelist.component.html',
+  styleUrl: './reservelist.component.css'
 })
-export class CopybooklistComponent implements OnInit, AfterViewInit {
+export class ReservelistComponent implements OnInit, AfterViewInit{
 
   displayedColumns: string[] = [];
-  dataSource: CopyBookDetails[] = [];
+  dataSource: ReserveDetails[] = [];
   usernameCache: Map<string, string> = new Map();
   isClient = true;
   isLogged = false;
-  libraryName ='';
-  bookTitle ='';
+  title='Listado de reservas';
+  libraryName = '';
   filters: SearchFilterDefinition[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
   @ViewChild(SearchBarComponent) searchBarComponent!: SearchBarComponent;
-  
-  searchParams: CopyBookSearchParams={
+
+  searchParams: ReserveSearchParams={
     npag:0,
     nelem:10
   };
 
-  pagedResponse!: PagedResponse<CopyBookDetails>;
+  pagedResponse!: PagedResponse<ReserveDetails>;
   loading: boolean = false;
   private lastSortRef: MatSort | null = null;
 
-  constructor(private copybookService: CopybookService, private dialog: MatDialog, private authService: AuthService,
+  constructor(private reserveService: ReserveService, private dialog: MatDialog, private authService: AuthService,
               private snackBar: MatSnackBar, private router:Router, private userService: UserService,
-              private bookService: BookService, private libraryService: LibraryService, private activatedRoute: ActivatedRoute ) {}
+              private libraryService: LibraryService, private activatedRoute: ActivatedRoute ) {}
 
-  getListCopyBook(){
+  getListReserve(){
     this.loading = true;
 
-    this.copybookService.getCopyBookList(this.searchParams).subscribe({
+    this.reserveService.getReserveList(this.searchParams).subscribe({
       next: (response) => {
         this.pagedResponse = response;
         this.dataSource.length = 0;
         this.dataSource.push(...response.items);
         this.dataSource = [...this.dataSource];
-        this.loadUsernameCopyBookGuest(this.dataSource)
-        this.loadBookTitle(this.dataSource);
-        this.loadLibraryName(this.dataSource);
+        this.loadUsernameReserveGuest(this.dataSource)
         console.log(this.dataSource);
         this.loading = false;
 
@@ -86,7 +82,7 @@ export class CopybooklistComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.filters = this.copybookService.getFilterCopyBookList();
+    this.filters = this.reserveService.getFilterReserveList();
 
     if (typeof window !== 'undefined' && window.localStorage) {
       this.authService.userStatus$.subscribe(() => {
@@ -100,23 +96,23 @@ export class CopybooklistComponent implements OnInit, AfterViewInit {
     }
 
     this.activatedRoute.params.subscribe(params => {
-      const bookIdParam = this.activatedRoute.snapshot.queryParamMap.get('bookId');
-      const bookId = bookIdParam !== null ? +bookIdParam : NaN;
-      if(!isNaN(bookId)){
-        this.getBookFromParams(bookId);
+      const userIdParam = this.activatedRoute.snapshot.queryParamMap.get('userId');
+      const userId = userIdParam !== null ? +userIdParam : NaN;
+      if(!isNaN(userId)){
+        this.getUserFromParams(userId);
       }
       else {
         const libraryIdParam = this.activatedRoute.snapshot.queryParamMap.get('libraryId');
         const libraryId = libraryIdParam !== null ? +libraryIdParam : NaN;
         if(!isNaN(libraryId)) this.getLibraryFromParams(libraryId);
       }
-      this.getListCopyBook();
+      this.getListReserve();
     })
       
   }
 
   getDisplayedColumns(): string[]{
-    const base = ['title', 'library', 'status', 'ubication', 'editionNum', 'actions']
+    const base = ['library', 'floor', 'room', 'seat', 'date', 'status', 'actions']
     if(this.isLogged && !this.isClient){
       const index=5;
       this.displayedColumns.splice(index,0,'username')
@@ -129,12 +125,10 @@ export class CopybooklistComponent implements OnInit, AfterViewInit {
       this.getDisplayedColumns();
     });
     
-
      this.sort.sortChange.subscribe((sort: Sort) => {
       const fieldMap: Record<string, string> = {
-        status: 'estado',
+        date: 'fecha',
         library: 'bilioteca',
-        title: 'titulo'
       };
 
       const mappedField = fieldMap[sort.active];
@@ -150,7 +144,7 @@ export class CopybooklistComponent implements OnInit, AfterViewInit {
       this.searchParams.npag = 0;
       
       // Llamamos a la función para obtener los usuarios con el nuevo orden
-      this.getListCopyBook();
+      this.getListReserve();
       
     });
     
@@ -162,9 +156,8 @@ export class CopybooklistComponent implements OnInit, AfterViewInit {
       this.lastSortRef = this.sort;
       this.sort.sortChange.subscribe((sort: Sort) => {
         const fieldMap: Record<string, string> = {
-        status: 'estado',
+        date: 'fecha',
         library: 'bilioteca',
-        title: 'titulo'
       };
 
         const mappedField = fieldMap[sort.active];
@@ -177,7 +170,7 @@ export class CopybooklistComponent implements OnInit, AfterViewInit {
         }
 
         this.searchParams.npag = 0; // Reinicia a la primera página
-        this.getListCopyBook();
+        this.getListReserve();
       });
     }
   }
@@ -197,25 +190,24 @@ export class CopybooklistComponent implements OnInit, AfterViewInit {
   applyFilter(event: {text:string; filters: {[key:string]:any}}){
     const { text, filters } = event;
 
-    this.searchParams.book = text?.trim().toLowerCase() || '';
-    this.searchParams.library = filters['library_search'] || '';
+    this.searchParams.library = text?.trim().toLowerCase() || '';
+    this.searchParams.userName = filters['username_search'] || '';
     this.searchParams.status = filters['status_search'] || '';
     this.searchParams.npag=0;
-    this.getListCopyBook();
+    this.getListReserve();
   }
 
-  getBookFromParams(bookId:number){
-    //Filtramos por el libro directamente.
-    this.searchParams.bookId = bookId;
-    //Guardamos el título para el resto de entradas
-    this.bookService.getBook(bookId+'').subscribe({
-      next:(b) =>{
-        this.bookTitle=b.title;
-        this.searchBarComponent.searchText = this.bookTitle;
-
+  getUserFromParams(userId:number){
+    //Filtramos por el usuario directamente.
+    this.searchParams.userId = userId;
+    //Cambiamos el título porque pueden ser sus propias reservas
+    this.userService.getUser(userId+'').subscribe({
+      next:(u) =>{
+        this.title = (this.checkIfClientUser()) ? "Mis resevas" : "Listado de reservas"
+        this.searchBarComponent.filters['username_search'] = u.name;
       },
       error: (err) => {
-        console.error('Error al obtener libro:', err);
+        console.error('Error al obtener usuario:', err);
         this.snackBar.open('Ha ocurrido un error.', 'Cerrar', {
           duration: 3000,
           panelClass: ['snackbar-error']
@@ -227,13 +219,14 @@ export class CopybooklistComponent implements OnInit, AfterViewInit {
   }
 
   getLibraryFromParams(libraryId:number){
-    //Filtramos por el libro directamente.
+    //Filtramos por la biblioteca directamente.
     this.searchParams.libraryId = libraryId;
-    //Guardamos el título para el resto de entradas
+    //Guardamos el nombre para el resto de entradas
     this.libraryService.getLibrary(libraryId+'').subscribe({
       next:(l) =>{
+        this.title="Listado de reservas"
         this.libraryName=l.name;
-        this.searchBarComponent.filters['library_search'] = this.libraryName;
+        this.searchBarComponent.searchText = this.libraryName;
       },
       error: (err) => {
         console.error('Error al obtener biblioteca:', err);
@@ -247,40 +240,15 @@ export class CopybooklistComponent implements OnInit, AfterViewInit {
     
   }
 
-  loadBookTitle(copybooks: CopyBookDetails[]){
-    copybooks.forEach(element => {
-      if(this.bookTitle){
-        element.bookTitle = this.bookTitle;
-      }
-      else {
-        this.bookService.getBook(element.bookId+'').subscribe({
-          next:(b) =>{
-            element.bookTitle = b.title;
-          },
-          error: (err) => {
-            console.error('Error al obtener libro:', err);
-            this.snackBar.open('Ha ocurrido un error.', 'Cerrar', {
-              duration: 3000,
-              panelClass: ['snackbar-error']
-            });
-            this.router.navigate(['/']);
-          }
-        });
-      }
-      
-    });
-
-  }
-
-  loadLibraryName(copybooks: CopyBookDetails[]){
-    copybooks.forEach(element => {
+  loadLibraryName(reserves: ReserveDetails[]){
+    reserves.forEach(element => {
       if(this.libraryName){
-        element.libraryName = this.libraryName;
+        element.library = this.libraryName;
       }
       else {
         this.libraryService.getLibrary(element.libraryId+'').subscribe({
           next:(l) =>{
-            element.libraryName = l.name;
+            element.library = l.name;
           },
           error: (err) => {
             console.error('Error al obtener biblioteca:', err);
@@ -296,14 +264,14 @@ export class CopybooklistComponent implements OnInit, AfterViewInit {
     });
   }
 
-  loadUsernameCopyBookGuest(copybooks: CopyBookDetails[]){
-    copybooks.forEach(element => {
-      this.userService.getUser(element.userCreatedId).subscribe({
+  loadUsernameReserveGuest(reserves: ReserveDetails[]){
+    reserves.forEach(element => {
+      this.userService.getUser(element.userReservedId).subscribe({
         next:(u) =>{
-          element.usernameCreatedBy = u.name + " " + u.surname;
+          element.usernameReservedBy= u.name + " " + u.surname;
         },
         error: (err) => {
-          element.usernameCreatedBy="Anónimo"
+          element.usernameReservedBy="Anónimo"
         }
       });
       
@@ -314,70 +282,102 @@ export class CopybooklistComponent implements OnInit, AfterViewInit {
     this.searchParams.nelem = event.pageSize;
     this.searchParams.npag = event.pageIndex;
     
-    this.getListCopyBook();
+    this.getListReserve();
   }
 
-  createCopybook(){
-    console.log('Crear ejemplar');
-    //Si tenemos la librería o el libro seleccionado le enviamos esos parámetros
-    if(this.bookTitle){
-      this.router.navigate(['/copybooknew'], { queryParams: { bookId: this.searchParams.bookId } })
+  createReserve(){
+    console.log('Crear reserva');
+    //Si tenemos la biblioteca le enviamos ese parámetro
+    if(this.libraryName){
+      this.router.navigate(['/reservenew'], { queryParams: { libraryId: this.searchParams.libraryId } })
     }
-    else if(this.libraryName){
-      this.router.navigate(['/copybooknew'], { queryParams: { libraryId: this.searchParams.libraryId } })
-    }
-    else this.router.navigate(['/copybooknew']);
+    else this.router.navigate(['/reservenew']);
 
   }
-  viewCopybook(copybook: CopyBookDetails){
-    console.log('Ver ejemplar', copybook);
-    this.router.navigate(['/copybookview', copybook.id], { queryParams: { edit: false } })
-
+  viewReserve(reserve: ReserveDetails){
+    console.log('Ver resereva', reserve);
+    this.router.navigate(['/reserveview', reserve.id], { queryParams: { edit: false } })
   }
-  reserveCopyBook(copybook: CopyBookDetails){
-    console.log('Reservar ejemplar', copybook)
-
+  editReserve(reserve: ReserveDetails){
+    console.log('Editar reserva',reserve);
+    if(!this.checkIfCanEditOrDelete(reserve)){
+      this.snackBar.open('No puedes editar esta reserva', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
+    }
+    else if(!this.checkValidStatus(reserve)){
+      this.snackBar.open('No puedes editar una reserva que ya ha pasado', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
+    }
+    this.router.navigate(['/reserveview', reserve.id], { queryParams: { edit: true } })
   }
-  editCopybook(copybook: CopyBookDetails){
-    console.log('Editar ejemplar',copybook);
-    if(!this.checkIfCanEditOrDeleteUser(copybook)){
-      this.snackBar.open('No tienes permisos para editar este ejemplar', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
-    }
-    else if(!this.checkIfCanEditDeleteOrReserve(copybook)){
-      this.snackBar.open('No puedes editar este ejemplar no esta disponible', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
-    }
-    this.router.navigate(['/copybookview', copybook.id], { queryParams: { edit: true } })
 
-  }
-  deleteCopybook(copybook: CopyBookDetails){
-    if(copybook.status === CopyBookStatus.booked){
-      this.snackBar.open('No puedes borrar este ejemplar. Está reservado', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
+  markReserve(reserve: ReserveDetails){
+    if(!this.checkValidStatus(reserve)){
+      this.snackBar.open('No puedes marcar una reserva que ya se ha actualizado.', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
     }
-    else if(!this.checkIfCanEditOrDeleteUser(copybook)){
-      this.snackBar.open('No tienes permisos para eliminar este ejemplar', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
+    else if(!this.checkIfCanEditOrDelete(reserve)){
+      this.snackBar.open('No puedes marcar esta reseva', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
     }
     else {
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         width: '350px',
         data: {
           title: '¿Estás seguro?',
-          message: 'Vas a eliminar a este ejemplar del sistema. Esta acción no se puede deshacer.'
+          message: 'Vas a marcar que el usuario ' + reserve.usernameReservedBy + ' ha acudido a la reserva. Esta acción no se puede deshacer.'
         }
       });
 
       dialogRef.afterClosed().subscribe(result => {
         if (result === true) {
-          this.copybookService.deleteCopyBook(copybook.id.toString()).subscribe({
+          reserve.status = ReserveStatus.assists;
+          this.reserveService.updateReserve(reserve.id.toString(), reserve).subscribe({
             next:() =>{
-              this.snackBar.open('Ejemplar eliminado', 'Cerrar', {
+              this.snackBar.open('Reserva actualizada', 'Cerrar', {
                 duration: 5000,
                 panelClass: ['snackbar-success']
               });
-              this.getListCopyBook();
+              this.getListReserve();
             },
             error: (err) => {
-              console.error('Error al borrar el ejemplar:', err);
-              this.snackBar.open('Error al borrar el ejemplar', 'Cerrar', {
+              console.error('Error al actualizar la reserva:', err);
+              this.snackBar.open('Error al actualizar la reserva', 'Cerrar', {
+                duration: 3000,
+                panelClass: ['snackbar-error']
+              });
+            }
+          })
+        }
+      });
+    }
+
+  }
+  deleteReserve(reserve: ReserveDetails){
+    if(!this.checkValidStatus(reserve)){
+      this.snackBar.open('No puedes borrar una que ya ha sido marcada.', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
+    }
+    else if(!this.checkIfCanEditOrDelete(reserve)){
+      this.snackBar.open('No puedes eliminar esta reseva', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
+    }
+    else {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: '350px',
+        data: {
+          title: '¿Estás seguro?',
+          message: 'Vas a eliminar a esta reserva del sistema. Esta acción no se puede deshacer.'
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.reserveService.deleteReserve(reserve.id.toString()).subscribe({
+            next:() =>{
+              this.snackBar.open('Reserva eliminada', 'Cerrar', {
+                duration: 5000,
+                panelClass: ['snackbar-success']
+              });
+              this.getListReserve();
+            },
+            error: (err) => {
+              console.error('Error al borrar la reserva:', err);
+              this.snackBar.open('Error al borrar la reserva', 'Cerrar', {
                 duration: 3000,
                 panelClass: ['snackbar-error']
               });
@@ -389,23 +389,25 @@ export class CopybooklistComponent implements OnInit, AfterViewInit {
 
   }
 
-  checkIfCanEditOrDeleteUser(copybook: CopyBookDetails): boolean{
+  checkIfCanEditOrDelete(reserve: ReserveDetails): boolean{
     if(this.isLogged){
       const userrole= this.authService.getRoleFromToken();
       const userId = this.authService.getUserIdFromToken();
-      if(userrole && userrole === Role.admin) return true;
-      else if(userId && userId === copybook.userCreatedId) return true;
-      else if(copybook.usernameCreatedBy && copybook.usernameCreatedBy === "Anónimo") return true;
+      let today = new Date();
+      let reserveDate = new Date(reserve.reserveDate);
+      today.setHours(0,0,0,0);
+      reserveDate.setHours(0,0,0,0);
+      const isFutureDate = reserveDate > today;
+
+      if(userrole && (userrole === Role.admin || userrole === Role.gestor)) return true;
+      else if(userId && userId === reserve.userReservedId && isFutureDate) return true;
       else return false;
     }
     else return false;
   }
 
-  checkIfCanEditDeleteOrReserve(copybook:CopyBookDetails): boolean{
-    if(this.isLogged){
-       return copybook.status === CopyBookStatus.available;
-    }
-    else return false;
+  checkValidStatus(reserve:ReserveDetails): boolean{
+    return reserve.status !== '';
   }
 
   get totalItems(): number {
@@ -415,11 +417,5 @@ export class CopybooklistComponent implements OnInit, AfterViewInit {
   get pageSize(): number {
     return this.pagedResponse?.pageSize ?? this.searchParams.nelem;
   }
-
-
-
-
-
-
 
 }

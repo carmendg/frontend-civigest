@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { Claims } from './config/claims';
-import { User } from './models/user.model';
+import { Role, User } from './models/user.model';
 import { UserService } from './services/user.service';
 import { UserStoreService } from './services/user-store.service';
 import { Observable } from 'rxjs';
@@ -104,6 +104,18 @@ export class AppComponent implements OnInit{
       this.isLogged = false;
       this.isAuthResolved =true;
       this.userStoreService.clearUser();
+  }
+
+  toReserves(): void{
+    if (typeof window !== 'undefined' && window.localStorage) {
+      let role = this.authService.getRoleFromToken();
+      if(role === Role.cliente){
+        this.router.navigate(['/reservelist'], { queryParams: { userId: this.authService.getUserIdFromToken() } });
+      }
+      else{
+        this.router.navigate(['/reservelist']);
+      }
+    }
   }
   
 }

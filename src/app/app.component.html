@@ -44,7 +44,7 @@
             <a class="nav-link" href="">Préstamos</a>
           </li>
           <li class="nav-item mx-3" *ngIf="isLogged">
-            <a class="nav-link" href="">Reservas</a>
+            <a class="nav-link"  (click)="toReserves()">Reservas</a>
           </li>
           <li class="nav-item mx-3" *ngIf="isLogged">
             <a class="nav-link" href="">Archivos Online</a>

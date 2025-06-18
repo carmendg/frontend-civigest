@@ -1,0 +1,67 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-center flex-grow-1 m-0"> {{ title }} </h1>
+        <span (click)="createReserve()" class="bi bi-plus-circle-fill fs-3 text-primary" title="Añadir nueva reserva"></span>
+      </div>
+  
+    <div *ngIf="loading" class="overlay">
+        <mat-spinner></mat-spinner>
+    </div>
+    
+    <app-search-bar #inputRef [placeholder]="'Buscar por biblioteca...'" [availableFilters]="filters" (search)="applyFilter($event)"></app-search-bar>
+
+
+    <table mat-table [dataSource]="dataSource" class="style-header-table style-table" matSort>
+    <ng-container matColumnDef="library">
+        <th [ngClass]="'centered'" mat-header-cell *matHeaderCellDef mat-sort-header>Biblioteca</th>
+        <td mat-cell *matCellDef="let reserve">{{ reserve.library }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="floor">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Planta</th>
+        <td mat-cell *matCellDef="let reserve">{{ reserve.floorNum }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="room">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Sala</th>
+        <td mat-cell *matCellDef="let reserve">{{ reserve.roomNum }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="seat">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Asiento</th>
+        <td mat-cell *matCellDef="let reserve">{{ reserve.seatNum }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+        <td mat-cell *matCellDef="let reserve">{{ reserve.reserveDate }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+        <td mat-cell *matCellDef="let reserve">{{ reserve.status }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="username">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Usuario </th>
+        <td mat-cell *matCellDef="let reserve">{{ reserve.usernameReservedBy }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let reserve">
+            <span (click)="viewReserve(reserve)" title="Visualizar" class="icon-style mx-2"><i class="bi bi-eye"></i></span>
+            <span (click)="markReserve(reserve)" title="Marcar asistencia" *ngIf="!isClient" class="icon-style mx-2"><i class="bi bi-calendar-check"></i></span>
+            <span (click)="editReserve(reserve)" title="Editar" *ngIf="checkIfCanEditOrDelete(reserve)" class="icon-style mx-2"><i class="bi bi-pencil"></i></span>
+            <span (click)="deleteReserve(reserve)" title="Eliminar" *ngIf="checkIfCanEditOrDelete(reserve)" class="icon-style mx-2"><i class="bi bi-trash"></i></span>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator class="style-footer mb-5" [length]="totalItems" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25]" (page)="onPageChange($event)">
+    </mat-paginator>
+    
+  </div>

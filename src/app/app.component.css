@@ -31,3 +31,7 @@
   #logo {
     width: 50%;
   }
+
+  a {
+    cursor:pointer;
+  }

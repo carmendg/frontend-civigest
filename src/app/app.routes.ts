@@ -23,6 +23,9 @@ import { CopybooknewComponent } from './copybook/copybooknew/copybooknew.compone
 import { SeatlistComponent } from './seat/seatlist/seatlist.component';
 import { SeatviewComponent } from './seat/seatview/seatview.component';
 import { SeatnewComponent } from './seat/seatnew/seatnew.component';
+import { ReservelistComponent } from './reserve/reservelist/reservelist.component';
+import { ReserveviewComponent } from './reserve/reserveview/reserveview.component';
+import { ReservenewComponent } from './reserve/reservenew/reservenew.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
@@ -51,6 +54,10 @@ export const routes: Routes = [
     { path: 'seatlist', component:SeatlistComponent},
     { path: 'seatview/:id', component:SeatviewComponent},
     { path: 'seatnew', component:SeatnewComponent, canActivate:[AuthGuard, RoleGuard]},
+    //RESERVE
+    { path: 'reservelist', component:ReservelistComponent},
+    { path: 'reserveview/:id', component:ReserveviewComponent},
+    { path: 'reservenew', component:ReservenewComponent},
 
     { path: '', component: HomeComponent }
   ];

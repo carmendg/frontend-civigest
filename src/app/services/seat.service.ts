@@ -71,7 +71,7 @@ export class SeatService {
           options: Object.values(SeatStatus),
           placeholder:''
         },
-        {//Planta
+        {//Floor
           id:'floor_search',
           label:'',
           placeholder:'Buscar por planta...',

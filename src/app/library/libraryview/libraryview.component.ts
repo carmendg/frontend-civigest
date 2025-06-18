@@ -72,6 +72,8 @@ export class LibraryviewComponent implements OnInit {
             error: (err) => {
               library.usernameCreatedBy="Anónimo"
               this.canEditOrDelete = this.checkIfCanEditOrDelete();
+              this.isClient = this.checkIfClientUser();
+              this.isLogged = this.checkIfIsLogged();
               if(!this.canEditOrDelete) this.editMode=false;
               if(this.editMode) this.habilitarEdicion();
             }
@@ -331,6 +333,7 @@ export class LibraryviewComponent implements OnInit {
 
   reserveSeat(){
     console.log("Hacia la reserva")
+    this.router.navigate(['/reservenew'], { queryParams: { libraryId: this.libraryId } })
   }
 
   get email() {
