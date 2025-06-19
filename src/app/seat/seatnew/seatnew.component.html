@@ -26,7 +26,7 @@
             </div>
         </div>
         <div *ngIf="formSent && !clearedErrors.has('planta') && planta?.invalid" class="text-danger">
-            <div *ngIf="planta?.hasError('required')">El estado es obligatorio.</div>
+            <div *ngIf="planta?.hasError('required')">El número de planta es obligatoria.</div>
             <div *ngIf="planta?.hasError('isValidFloorNumber')">Debes introducir un valor correcto.</div>
         </div>
 

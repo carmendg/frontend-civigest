@@ -22,7 +22,11 @@ export class ReserveService {
   }
 
   getReserve(id: string): Observable<any> {
-    return this.http.get(`${ApiBaseUrls.reserves}/${id}`);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization' : `Bearer ${token}`
+    });
+    return this.http.get(`${ApiBaseUrls.reserves}/${id}`, {headers});
   }
 
   updateReserve(id:string, reserve: ReserveDetails): Observable<any>{
@@ -42,6 +46,10 @@ export class ReserveService {
   }
 
   getReserveList(request: ReserveSearchParams): Observable<PagedResponse<ReserveDetails>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization' : `Bearer ${token}`
+    });
     
     let params = new HttpParams() 
       .set('npag', request.npag.toString())
@@ -52,11 +60,13 @@ export class ReserveService {
     if (request.userId) params = params.set('userId', request.userId);
     if (request.userName) params = params.set('usuario', request.userName);
     if (request.library) params = params.set('biblio', request.library);
+    if (request.floor) params = params.set('planta', request.floor);
+    if (request.reserveDate) params = params.set('fecha', request.reserveDate);
 
     if (request.orderBy) params = params.set('orden', request.orderBy);
     if (request.orderField) params = params.set('campoOrden', request.orderField);
 
-    return this.http.get<PagedResponse<ReserveDetails>>(`${ApiBaseUrls.reserves}/`, {params: params });
+    return this.http.get<PagedResponse<ReserveDetails>>(`${ApiBaseUrls.reserves}/`, {params: params, headers:headers });
   }
 
   getFilterReserveList(): SearchFilterDefinition[] {

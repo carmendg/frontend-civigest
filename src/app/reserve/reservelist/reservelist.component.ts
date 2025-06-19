@@ -310,10 +310,11 @@ export class ReservelistComponent implements OnInit, AfterViewInit{
   }
 
   markReserve(reserve: ReserveDetails){
+
     if(!this.checkValidStatus(reserve)){
       this.snackBar.open('No puedes marcar una reserva que ya se ha actualizado.', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
     }
-    else if(!this.checkIfCanEditOrDelete(reserve)){
+    else if(!this.checkIfCanMark(reserve)){
       this.snackBar.open('No puedes marcar esta reseva', 'Cerrar', { duration: 3000, panelClass: ['snackbar-error'] });
     }
     else {
@@ -377,7 +378,7 @@ export class ReservelistComponent implements OnInit, AfterViewInit{
             },
             error: (err) => {
               console.error('Error al borrar la reserva:', err);
-              this.snackBar.open('Error al borrar la reserva', 'Cerrar', {
+              this.snackBar.open('Error al borrar la reserva. '+ err.error, 'Cerrar', {
                 duration: 3000,
                 panelClass: ['snackbar-error']
               });
@@ -393,17 +394,42 @@ export class ReservelistComponent implements OnInit, AfterViewInit{
     if(this.isLogged){
       const userrole= this.authService.getRoleFromToken();
       const userId = this.authService.getUserIdFromToken();
-      let today = new Date();
-      let reserveDate = new Date(reserve.reserveDate);
-      today.setHours(0,0,0,0);
-      reserveDate.setHours(0,0,0,0);
-      const isFutureDate = reserveDate > today;
+      const isFutureDate = this.checkFutureDate(reserve.reserveDate);
 
-      if(userrole && (userrole === Role.admin || userrole === Role.gestor)) return true;
-      else if(userId && userId === reserve.userReservedId && isFutureDate) return true;
+      if(userrole && (userrole === Role.admin || userrole === Role.gestor) && isFutureDate) return true;
+      else if(userId && userId === reserve.userReservedId +'' && isFutureDate) return true;
       else return false;
     }
     else return false;
+  }
+
+  checkIfCanMark(reserve: ReserveDetails): boolean{
+    if(this.isLogged && this.canMarkDate(reserve)){
+      const userrole= this.authService.getRoleFromToken();
+      const userId = this.authService.getUserIdFromToken();
+
+      if(userrole && (userrole === Role.admin || userrole === Role.gestor)) return true;
+      else return false;
+    }
+    else return false;
+  }
+
+  canMarkDate(reserve: ReserveDetails): boolean{
+    let today = new Date();
+    let reserveDate = new Date(reserve.reserveDate);
+    today.setHours(0,0,0,0);
+    reserveDate.setHours(0,0,0,0);
+
+    return today.getTime() === reserveDate.getTime();
+  }
+
+  checkFutureDate(date:string): boolean{
+    let today = new Date();
+    let reserveDate = new Date(date);
+    today.setHours(0,0,0,0);
+    reserveDate.setHours(0,0,0,0);
+    
+    return today < reserveDate;
   }
 
   checkValidStatus(reserve:ReserveDetails): boolean{

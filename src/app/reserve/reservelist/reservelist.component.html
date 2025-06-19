@@ -51,7 +51,7 @@
         <th mat-header-cell *matHeaderCellDef>Acciones</th>
         <td mat-cell *matCellDef="let reserve">
             <span (click)="viewReserve(reserve)" title="Visualizar" class="icon-style mx-2"><i class="bi bi-eye"></i></span>
-            <span (click)="markReserve(reserve)" title="Marcar asistencia" *ngIf="!isClient" class="icon-style mx-2"><i class="bi bi-calendar-check"></i></span>
+            <span (click)="markReserve(reserve)" title="Marcar asistencia" *ngIf="!isClient && canMarkDate(reserve)" class="icon-style mx-2"><i class="bi bi-calendar-check"></i></span>
             <span (click)="editReserve(reserve)" title="Editar" *ngIf="checkIfCanEditOrDelete(reserve)" class="icon-style mx-2"><i class="bi bi-pencil"></i></span>
             <span (click)="deleteReserve(reserve)" title="Eliminar" *ngIf="checkIfCanEditOrDelete(reserve)" class="icon-style mx-2"><i class="bi bi-trash"></i></span>
         </td>

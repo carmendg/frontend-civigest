@@ -34,9 +34,9 @@
 
         <div class="divider"></div>
 
-        <h2 class="text-center mt-4 mb-4">¡Novedades en libros!</h2>
+        <h2 class="text-center">¡Novedades en libros!</h2>
         <div *ngIf="libros.length > 0; else noBooks">
-            <div class="container-fluid mt-5">          
+            <div class="container-fluid mt-2">          
               <div class="row g-4 justify-content-center">
           
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let libro of libros | slice:0:maxBooks">
@@ -55,7 +55,7 @@
             </div>
         </div>
         <ng-template #noBooks>
-        <div class="text-center mt-5">
+        <div class="text-center mt-2">
             <p>No hay novedades disponibles por el momento.</p>
         </div>
         </ng-template>
@@ -63,9 +63,9 @@
         <div class="divider"></div>
         
 
-        <h2 class="text-center mt-4 mb-4">Visita nuestras bibliotecas</h2>
+        <h2 class="text-center">Visita nuestras bibliotecas</h2>
         <div *ngIf="bibliotecas.length > 0; else noBiblio">
-            <div class="container-fluid mt-5">          
+            <div class="container-fluid mt-2">          
               <div class="row g-4 justify-content-center">
           
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let biblio of bibliotecas | slice:0:maxLibrary">
@@ -85,14 +85,14 @@
             </div>
         </div>
         <ng-template #noBiblio>
-        <div class="text-center mt-5">
+        <div class="text-center mt-2">
             <p>No hay información disponibles por el momento.</p>
         </div>
         </ng-template>
 
         <div class="divider"></div>
 
-        <h2 class="text-center mt-4 mb-4">Actualizaciones en archivos online</h2>
+        <h2 class="text-center mb-2">Actualizaciones en archivos online</h2>
         <!--<div *ngIf="books.length > 0; else noBooks">
             <div class="container-fluid mt-5">          
               <div class="row g-4 justify-content-center">

@@ -1,6 +1,6 @@
 export interface CreateReserve {
     reserveDate: string;
-    seatReservedId: number;
+    seatReservedId: string;
 }
 
 export enum ReserveStatus {
@@ -30,6 +30,8 @@ export interface ReserveSearchParams{
     library?: string;
     userId?: number;
     userName?: string;
+    floor?:string;
+    reserveDate?: string;
     orderBy?: string;
     orderField?: string;
 }

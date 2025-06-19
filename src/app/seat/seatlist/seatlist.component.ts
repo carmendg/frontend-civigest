@@ -31,11 +31,13 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dial
 })
 export class SeatlistComponent implements OnInit, AfterViewInit{
 
-  displayedColumns: string[] = ['library', 'floor', 'room', 'seatNum', 'status', 'username', 'actions'];
+  displayedColumns: string[] = [];
   dataSource: SeatDetails[] = [];
   filters: SearchFilterDefinition[] = [];
   usernameCache: Map<string, string> = new Map();
   libraryName='';
+  isClient = true;
+  isLogged = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
@@ -57,6 +59,17 @@ export class SeatlistComponent implements OnInit, AfterViewInit{
   ngOnInit(): void {
 
     this.filters = this.seatService.getFilterSeatList();
+    if (typeof window !== 'undefined' && window.localStorage) {
+      this.authService.userStatus$.subscribe(() => {
+        this.isClient = this.checkIfClientUser();
+        this.isLogged = this.checkIfIsLogged();
+        this.displayedColumns = this.getDisplayedColumns();
+      });
+      this.isClient = this.checkIfClientUser();
+      this.isLogged = this.checkIfIsLogged();
+      this.displayedColumns = this.getDisplayedColumns();
+    }
+
     this.activatedRoute.params.subscribe(params => {
       console.log(params);
       const libraryIdParam = this.activatedRoute.snapshot.queryParamMap.get('libraryId');
@@ -66,6 +79,27 @@ export class SeatlistComponent implements OnInit, AfterViewInit{
       this.getListSeat();
     })
     
+  }
+
+  checkIfClientUser(): boolean{
+    const userrole= this.authService.getRoleFromToken();
+    if(userrole && (userrole === Role.admin || userrole === Role.gestor)) return false;
+    return true;
+  }
+  
+  checkIfIsLogged(): boolean{
+    const userid= this.authService.getUserIdFromToken();
+    if(userid) return true;
+    return false;
+  }
+
+  getDisplayedColumns(): string[]{
+    const base =['library', 'floor', 'room', 'seatNum', 'status', 'actions']
+    if(this.isLogged && !this.isClient){
+      const index=5;
+      this.displayedColumns.splice(index,0,'username')
+    }
+    return base
   }
 
   applyFilter(event: {text:string; filters: {[key:string]:any}}){
@@ -190,6 +224,10 @@ export class SeatlistComponent implements OnInit, AfterViewInit{
   }
 
   ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.getDisplayedColumns();
+    });
+
     this.sort.sortChange.subscribe((sort: Sort) => {
       const fieldMap: Record<string, string> = {
         status: 'estado',
@@ -311,10 +349,16 @@ export class SeatlistComponent implements OnInit, AfterViewInit{
 
   }
 
+  reserveSeat(seat:SeatDetails): void{
+    this.router.navigate(['/reservenew'], { queryParams: { libraryId: seat.libraryId } })
+
+  }
+
   checkIfCanEditOrDeleteUser(seat: SeatDetails): boolean{
     const userrole= this.authService.getRoleFromToken();
     const userId = this.authService.getUserIdFromToken();
     if(userrole && userrole === Role.admin) return true;
+    else if(userrole && userrole === Role.cliente) return false;
     else if(userId && userId === seat.userCreatedId) return true;
     else if(seat.usernameCreatedBy && seat.usernameCreatedBy === "Anónimo") return true;
     else return false;
