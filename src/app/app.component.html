@@ -44,10 +44,10 @@
             <a class="nav-link" href="">Préstamos</a>
           </li>
           <li class="nav-item mx-3" *ngIf="isLogged">
-            <a class="nav-link"  (click)="toReserves()">Reservas</a>
+            <a class="nav-link" (click)="toReserves()">Reservas</a>
           </li>
           <li class="nav-item mx-3" *ngIf="isLogged">
-            <a class="nav-link" href="">Archivos Online</a>
+            <a class="nav-link" href="/archivelist">Archivos Online</a>
           </li>
           <ng-container *ngIf="(user$ | async) as user">         
             <li class="nav-item dropdown" *ngIf="isLogged && user.role !== 'Cliente'">

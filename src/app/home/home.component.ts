@@ -5,8 +5,10 @@ import { BookService } from '../services/book.service';
 import { Router, RouterModule } from '@angular/router';
 import { LibraryService } from '../services/library.service';
 import { LibraryDetails, LibrarySearchParams } from '../models/library.model';
-import { PagedResponse } from '../models/paged-response.model';
 import { BookDetails, BookSearchParams } from '../models/book.model';
+import { AuthService } from '../services/auth.service';
+import { ArchiveService } from '../services/archive.service';
+import { ArchiveDetails, ArchiveSearchParams } from '../models/archive.model';
 declare var bootstrap: any;
 
 @Component({
@@ -23,15 +25,23 @@ export class HomeComponent implements OnInit{
   libros: BookDetails[] = [];
   maxBooks: number = 6;
   maxLibrary: number = 3;
+  maxArchives: number = 6;
   bibliotecas: LibraryDetails[] =[];
+  archivos: ArchiveDetails[]=[];
+  isLogged: boolean = false;
 
-  constructor(private bookService: BookService, private libraryService: LibraryService, private router: Router) { }
+  constructor(private bookService: BookService, private libraryService: LibraryService, private router: Router, 
+              private authService: AuthService, private archiveService: ArchiveService) { }
 
   ngOnInit(): void {
     // Obtener los libros desde el servicio
     this.getListBook();
 
     this.getListLibrary();
+
+    this.getListArchive();
+
+    this.isLogged = this.checkIfIsLogged();
 
     if (typeof window !== 'undefined') {
       this.updateMaxElements(window.innerWidth);
@@ -59,22 +69,33 @@ export class HomeComponent implements OnInit{
     }
   }
 
+  checkIfIsLogged(): boolean{
+    const userid= this.authService.getUserIdFromToken();
+    if(userid) return true;
+    return false;
+  }
+
   updateMaxElements(width: number) {
     if (width < 576) {
       this.maxBooks = 1;
       this.maxLibrary = 1;
+      this.maxArchives = 1;
     } else if (width < 768) {
       this.maxBooks = 2;
       this.maxLibrary = 2;
+      this.maxArchives = 2;
     } else if (width < 992) {
       this.maxBooks = 3;
       this.maxLibrary = 3;
+      this.maxArchives = 3;
     } else if (width < 1200) {
       this.maxBooks = 4;
       this.maxLibrary = 3;
+      this.maxArchives = 4
     } else {
       this.maxBooks = 6;
       this.maxLibrary = 3;
+      this.maxArchives = 6;
     }
   }
   
@@ -97,10 +118,30 @@ export class HomeComponent implements OnInit{
     });
   }
 
+  getListArchive(){
+    if(this.isLogged){
+      const searchParams: ArchiveSearchParams={
+        npag:0,
+        nelem:6,
+        orderBy:'asc',
+        orderField:'fecha'
+      };
+
+      this.archiveService.getArchiveList(searchParams).subscribe({
+        next: (response) => {
+          this.archivos.push(...response.items);
+        },
+        error: (err) => {
+          console.error("Error al lanzar petición", err)
+        },
+      });
+    }
+  }
+
   getListBook(){
     const searchParams: BookSearchParams={
       npag:0,
-      nelem:3,
+      nelem:6,
       orderBy:'asc',
       orderField:'title'
     };
@@ -120,6 +161,9 @@ export class HomeComponent implements OnInit{
   }
   verDetallesLibro(book: BookDetails){
     this.router.navigate(['/bookview', book.id]);
+  }
+  verDetallesArchivo(archive: ArchiveDetails){
+    this.router.navigate(['/archiveview', archive.id]);
   }
 
 }

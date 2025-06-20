@@ -79,7 +79,7 @@
           
               </div>
           
-              <div class="text-center mt-3">
+              <div class="text-center mt-3" [ngClass]="{ 'mb-2': !isLogged }">
                 <a routerLink="/librarylist" class="btn btn-outline-primary">Ver más sobre bibliotecas</a>
               </div>
             </div>
@@ -90,35 +90,33 @@
         </div>
         </ng-template>
 
-        <div class="divider"></div>
+        <div class="divider" *ngIf="isLogged"></div>
 
-        <h2 class="text-center mb-2">Actualizaciones en archivos online</h2>
-        <!--<div *ngIf="books.length > 0; else noBooks">
-            <div class="container-fluid mt-5">          
+        <h2 class="text-center mb-2" *ngIf="isLogged">Actualizaciones en archivos online</h2>
+        <div *ngIf="archivos.length > 0; else noArchives">
+            <div class="container-fluid mt-2">          
               <div class="row g-4 justify-content-center">
           
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let book of books | slice:0:maxBooks">
-                  <div class="card h-100 shadow-sm">
-                    <a [routerLink]="book.link" class="text-decoration-none text-dark">
-                      <img src="carrusel/1.png" class="card-img-top" [alt]="book.title">
-                      <div class="card-body text-center">
-                        <p class="card-title">{{ book.title }}</p>
-                      </div>
-                    </a>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let archivo of archivos | slice:0:maxArchives">
+                  <div class="card h-100 shadow-sm card-clickable" (click)="verDetallesArchivo(archivo)">
+                    <div class="logo-pdf bi bi-file-earmark-pdf"></div>
+                    <div class="card-body text-center">
+                      <p class="card-title">{{ archivo.title }}</p>
+                      <p class="card-text flex-grow-1 m-0"> <strong>Publicado el: </strong>{{ archivo.publicationDate }}</p>
+                    </div>
                   </div>
-                </div>
-          
+                </div>          
               </div>
           
               <div class="text-center mt-3">
-                <a routerLink="/libros" class="btn btn-outline-primary">Ver más archivos</a>
+                <a routerLink="/archivelist" class="btn btn-outline-primary">Ver más archivos</a>
               </div>
             </div>
         </div>
-        <ng-template #noBooks>
-        <div class="text-center mt-5">
-            <p>No hay actualizaciones disponibles por el momento.</p>
-        </div>
-        </ng-template>-->
+        <ng-template #noArchives *ngIf="isLogged">
+          <div class="text-center mt-2">
+              <p>No hay actualizaciones disponibles por el momento.</p>
+          </div>
+        </ng-template>
     </div>
 </div>

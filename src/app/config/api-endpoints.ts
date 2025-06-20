@@ -9,6 +9,7 @@ export const ApiBaseUrls = {
     books: 'http://localhost:44389/api/books',
     authors: 'http://localhost:44389/api/authors',
     copybooks: 'http://localhost:44389/api/books/copybooks',
+    archives: 'http://localhost:44389/api/archives',
     // member
     seats: 'http://localhost:44307/api/seats',
     reserves: 'http://localhost:44307/api/seats/reserves'

@@ -26,6 +26,9 @@ import { SeatnewComponent } from './seat/seatnew/seatnew.component';
 import { ReservelistComponent } from './reserve/reservelist/reservelist.component';
 import { ReserveviewComponent } from './reserve/reserveview/reserveview.component';
 import { ReservenewComponent } from './reserve/reservenew/reservenew.component';
+import { ArchivelistComponent } from './archive/archivelist/archivelist.component';
+import { ArchiveviewComponent } from './archive/archiveview/archiveview.component';
+import { ArchivenewComponent } from './archive/archivenew/archivenew.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
@@ -58,6 +61,10 @@ export const routes: Routes = [
     { path: 'reservelist', component:ReservelistComponent},
     { path: 'reserveview/:id', component:ReserveviewComponent},
     { path: 'reservenew', component:ReservenewComponent},
+    //ARCHIVE
+    { path: 'archivelist', component:ArchivelistComponent},
+    { path: 'archiveview/:id', component:ArchiveviewComponent},
+    { path: 'archivenew', component:ArchivenewComponent},
 
     { path: '', component: HomeComponent }
   ];

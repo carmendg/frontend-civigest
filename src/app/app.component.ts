@@ -79,10 +79,10 @@ export class AppComponent implements OnInit{
   }
 
   logout(event: Event): void {
-    event.preventDefault(); // Evita que el enlace recargue la página
+    event.preventDefault();
     this.authService.logout();
     this.userStoreService.clearUser();
-    this.router.navigate(['/']); // O redirige a donde necesites
+    window.location.href='/';
   }
 
   getUser(id: string): void{
