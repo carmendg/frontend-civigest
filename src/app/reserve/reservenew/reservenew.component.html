@@ -95,30 +95,7 @@
             <div *ngIf="asiento?.hasError('required')">Debes seleccionar un asiento.</div>
         </div>
 
-        <button class="btn btn-block text-center my-3">Crear</button>
+        <button class="btn btn-block text-center my-3">Reservar</button>
     </div>
-
-   <!-- <div *ngFor="let row of entry.value; let i=index" class="row justify-content-center mb-3 container-seat">
-                                <h4 class="text-center">Mesa: {{ i+1 }}</h4>
-                                <div class="row justify-content-center mb-2">
-
-                                <div class="col-auto d-flex flex-column align-items-center" *ngFor="let seat of getFirstHalf(row)">
-                                    <span class="material-icons seat-icon fs-2" (click)="selectedSeat(seat)" [title]="getTitle(seat)"
-                                            [ngClass]="{'text-success': seat.status === 'Disponible', 'text-danger': seat.status !== 'Disponible', 'selected-seat': seat.id === selectedSeatId}">
-                                        event_seat
-                                    </span>
-                                    <small class="seat-number"> {{ seat.seatNum }} </small>
-                                </div>
-                                </div>
-
-                                <div class="row justify-content-center mb-2">
-                                <div class="col-auto d-flex flex-column align-items-center" *ngFor="let seat of getSecondHalf(row)">
-                                    <span class="material-icons seat-icon fs-2" (click)="selectedSeat(seat)" [title]="getTitle(seat)"
-                                            [ngClass]="{'text-success': seat.status === 'Disponible', 'text-danger': seat.status !== 'Disponible', 'selected-seat': seat.id === selectedSeatId}">
-                                        event_seat
-                                    </span>
-                                    <small class="seat-number"> {{ seat.seatNum }} </small>
-                                </div>
-                            </div>-->
     
 </form>
