@@ -48,3 +48,13 @@ h2 {
     transform: scale(1.02);
     box-shadow: 0 0 11px rgba(33,33,33,.2);
 }
+.logo-pdf {
+  font-size: 4rem; 
+  color: red;
+  text-align: center;
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width:100%;
+}

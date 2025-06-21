@@ -58,13 +58,13 @@ export const routes: Routes = [
     { path: 'seatview/:id', component:SeatviewComponent},
     { path: 'seatnew', component:SeatnewComponent, canActivate:[AuthGuard, RoleGuard]},
     //RESERVE
-    { path: 'reservelist', component:ReservelistComponent},
-    { path: 'reserveview/:id', component:ReserveviewComponent},
-    { path: 'reservenew', component:ReservenewComponent},
+    { path: 'reservelist', component:ReservelistComponent, canActivate: [AuthGuard]},
+    { path: 'reserveview/:id', component:ReserveviewComponent, canActivate: [AuthGuard]},
+    { path: 'reservenew', component:ReservenewComponent, canActivate: [AuthGuard]},
     //ARCHIVE
-    { path: 'archivelist', component:ArchivelistComponent},
-    { path: 'archiveview/:id', component:ArchiveviewComponent},
-    { path: 'archivenew', component:ArchivenewComponent},
+    { path: 'archivelist', component:ArchivelistComponent, canActivate: [AuthGuard]},
+    { path: 'archiveview/:id', component:ArchiveviewComponent, canActivate: [AuthGuard]},
+    { path: 'archivenew', component:ArchivenewComponent, canActivate: [AuthGuard, RoleGuard]},
 
     { path: '', component: HomeComponent }
   ];

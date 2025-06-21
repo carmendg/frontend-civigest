@@ -39,9 +39,9 @@ export class HomeComponent implements OnInit{
 
     this.getListLibrary();
 
-    this.getListArchive();
-
     this.isLogged = this.checkIfIsLogged();
+
+    this.getListArchive();
 
     if (typeof window !== 'undefined') {
       this.updateMaxElements(window.innerWidth);

@@ -1,1 +1,43 @@
-<p>archivelist works!</p>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-center flex-grow-1 m-0">Nuestros archivos</h1>
+        <span *ngIf="canAdd" (click)="createArchive()" class="bi bi-plus-circle-fill fs-3 text-primary" title="Añadir nuevo archivo"></span>
+      </div>
+  
+    <div *ngIf="loading" class="overlay">
+        <mat-spinner></mat-spinner>
+    </div>
+
+    <app-search-bar [availableFilters]="filters" (search)="applyFilter($event)"></app-search-bar>
+
+    <div *ngIf="archivos.length > 0 && !loading; else noArchivo">
+        <div class="container-fluid mt-5">          
+          <div class="row g-4 justify-content-center">
+
+            <div class="col-12 col-md-4 mb-4" *ngFor="let archivo of archivos">
+                <div class="card h-100 shadow-sm card-clickable" (click)="verDetalles(archivo)" >
+                    <img src="PDF_file.png" class="card-img-top d-block mt-2" alt="{{ archivo.title }}"/>                    
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ archivo.title }}</h5>
+                        <p class="card-text flex-grow-1 m-0"> <strong>Fecha: </strong>{{ archivo.publicationDate }}</p>
+                        <p class="card-text flex-grow-1"> <strong>Autores: </strong>{{ getAuthorsList(archivo) }}</p>
+                        <p class="card-text flex-grow-1">{{ archivo.summary }}</p>
+                        <button class="btn btn-outline-primary mt-auto" (click)="verDetalles(archivo); $event.stopPropagation()" >
+                        Ver más
+                        </button>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      
+        <div class="text-center mt-3 my-3">
+            <button class="btn btn-primary" (click)="loadMore()">Cargar más <i class="bi bi-arrow-clockwise"></i></button>
+        </div>
+    </div>
+    <ng-template #noArchivo>
+        <div class="text-center mt-5">
+            <p>No hay información disponibles por el momento.</p>
+        </div>
+    </ng-template>
+</div>
