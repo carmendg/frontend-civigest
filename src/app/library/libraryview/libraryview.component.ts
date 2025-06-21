@@ -59,25 +59,28 @@ export class LibraryviewComponent implements OnInit {
           this.libraryData = library;
           this.fillValuesForm(library);
           this.name=library.name;
-          this.userService.getUser(library.userCreatedId).subscribe({
-            next:(u) =>{
-              library.usernameCreatedBy = u.name + " " + u.surname;
-              this.usernameCreatedBy = library.usernameCreatedBy;
-              this.canEditOrDelete = this.checkIfCanEditOrDelete();
-              this.isClient = this.checkIfClientUser();
-              this.isLogged = this.checkIfIsLogged();
-              if(!this.canEditOrDelete) this.editMode=false;
-              if(this.editMode) this.habilitarEdicion();
-            },
-            error: (err) => {
-              library.usernameCreatedBy="Anónimo"
-              this.canEditOrDelete = this.checkIfCanEditOrDelete();
-              this.isClient = this.checkIfClientUser();
-              this.isLogged = this.checkIfIsLogged();
-              if(!this.canEditOrDelete) this.editMode=false;
-              if(this.editMode) this.habilitarEdicion();
-            }
-          });
+          this.isClient = this.checkIfClientUser();
+          if(!this.isClient){
+            this.userService.getUser(library.userCreatedId).subscribe({
+              next:(u) =>{
+                library.usernameCreatedBy = u.name + " " + u.surname;
+                this.usernameCreatedBy = library.usernameCreatedBy;
+                this.canEditOrDelete = this.checkIfCanEditOrDelete();
+                this.isClient = this.checkIfClientUser();
+                this.isLogged = this.checkIfIsLogged();
+                if(!this.canEditOrDelete) this.editMode=false;
+                if(this.editMode) this.habilitarEdicion();
+              },
+              error: (err) => {
+                library.usernameCreatedBy="Anónimo"
+                this.canEditOrDelete = this.checkIfCanEditOrDelete();
+                this.isClient = this.checkIfClientUser();
+                this.isLogged = this.checkIfIsLogged();
+                if(!this.canEditOrDelete) this.editMode=false;
+                if(this.editMode) this.habilitarEdicion();
+              }
+            });
+          }
         }
       });
       

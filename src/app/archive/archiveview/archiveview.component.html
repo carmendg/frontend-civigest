@@ -1,1 +1,99 @@
-<p>archiveview works!</p>
+<h1 class="text-center">Información del archivo: {{name}} </h1>
+<h2 class="text-muted text-center pt-2">Esta es la información que tenemos sobre este archivo</h2>
+<p class="text-muted text-center pt-2" *ngIf="!isClient">El usuario creador es: {{usernameCreatedBy}}</p>
+
+<form class="pt-3 wrapper" [formGroup]="archiveForm" (ngSubmit)="onSent()">
+
+    <div *ngIf="!editMode">
+        <div class="align-items-center pdf-viewer">
+            <pdf-viewer [src]="'data:' + archiveForm.value.ficheroMimeType + ';base64, '+ archiveForm.value.fichero" [render-text]="true" class="d-block pdf-viewer"></pdf-viewer>
+        </div>
+        <div class="divider"></div>
+    </div>
+
+    
+
+    <div class="form-group py-2">
+        <div class="input-field" [class.disabled]="!editMode">
+            <span class="bi bi-book-half p-2"></span>
+            <input type="text" placeholder="Título" name="titulo" id="titulo" formControlName="titulo" (focus)="onFocus('titulo')" [readonly]="!editMode" [required]="editMode">
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('titulo') && titulo?.invalid" class="text-danger">
+        <div *ngIf="titulo?.hasError('required')">El título es obligatorio.</div>
+        <div *ngIf="titulo?.hasError('invalidName')">El formato del título no es correcto.</div>
+    </div>
+
+    <div class="form-group py-2">
+        <div class="input-field"  [class.disabled]="!editMode">
+            <span class="bi bi-calendar-event-fill p-2"></span>
+            <input type="date" name="fechaPubli" id="fechaPubli" title="Fecha publicación" formControlName="fechaPubli"  [readonly]="!editMode" [required]="editMode">
+        </div>
+    </div>
+     <div *ngIf="formSent && !clearedErrors.has('fechaPubli') && fechaPubli?.invalid" class="text-danger">
+        <div *ngIf="fechaPubli?.hasError('required')">La fecha de publicación es obligatoria.</div>
+        <div *ngIf="fechaPubli?.hasError('futureDate')">Debe ser anterior o igual a la fecha de hoy.</div>
+    </div>
+
+    <div class="form-group py-2" *ngIf="!isClient">
+        <div class="input-field file-upload-field" [class.disabled]="!editMode">
+            <span class="bi bi-image p-2"></span>
+            <input type="file" accept="application/pdf" name="fichero" id="fichero" (focus)="onFocus('fichero')" (change)="onFileSelected($event)" [readonly]="!editMode" [required]="editMode">
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('fichero') && fichero?.invalid" class="text-danger">
+        <div *ngIf="fichero?.hasError('required')">El fichero es obligatorio. Debe ser en PDF</div>
+    </div>
+
+    <div class="form-group py-2">
+        <div class="input-field input-field-top" [class.disabled]="!editMode">
+            <span class="bi bi-file-text-fill p-2"></span>
+            <textarea placeholder="Resumen" name="resumen" id="resumen" formControlName="resumen" rows="4" (focus)="onFocus('resumen')" [disabled]="!editMode" [required]="editMode"></textarea>
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('resumen') && resumen?.invalid" class="text-danger">
+        <div *ngIf="resumen?.hasError('required')">El resumen es obligatorio.</div>
+        <div *ngIf="resumen?.hasError('invalidDescription')">El formato del resumen es minimo 10 caracteres máximo 200.</div>
+    </div>
+
+    <div class="form-group py-2">
+        <div class="input-field input-field-top position-relative" [class.disabled]="!editMode">
+            <span class="bi bi-person-plus-fill p-2"></span>
+            <div class="container-author d-flex align-items-start gap-2">
+                <div class="button-wrapper" *ngIf="editMode">
+                    <button type="button" class="btn btn-outline-secondary mt-2 px-2" (click)="openAuthorDialog()"> Seleccionar autores</button>
+                </div>
+                <div class="tags-wrapper d-flex flex-wrap gap-2">
+                    <span class="badge bg-primary d-flex align-items-center px-2 py-1 tag-badge" *ngFor="let autor of autores?.value">
+                        {{ autor.nameSurname }}
+                        <button *ngIf="editMode" type="button" class="btn-close btn-close-white btn-sm ms-2" (click)="removeAuthor(autor)"></button>
+                    </span>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+    <div *ngIf="formSent && !clearedErrors.has('autores') && autores?.invalid" class="text-danger">
+        <div *ngIf="autores?.hasError('required')">El autor es obligatorio.</div>
+    </div>
+
+
+    <div class="form-group py-2 text-center" *ngIf="canEditOrDelete">
+        <button type="button" class="btn btn-edit-mode text-center my-3" (click)="editMode ? deshabilitarEdicion() : habilitarEdicion()" >
+            {{ editMode ? 'Cancelar edición' : 'Modo edición' }}
+            <span *ngIf="editMode" class="bi bi-slash-circle p-2"></span>
+            <span *ngIf="!editMode" class="bi bi-pencil p-2"></span>
+        </button>
+    </div>
+
+
+    <button *ngIf="editMode" class="btn btn-block text-center my-3">Actualizar cambios</button>
+    <div class="form-group text-center" *ngIf="canEditOrDelete">
+        <button type="button" class="btn btn-outline-danger my-3" (click)="deleteArchive()">Borrar archivo</button>
+    </div>
+    <div class="form-group text-center" *ngIf="!canEditOrDelete">
+        <button type="button" class="btn btn-block text-center my-3" (click)="goBack()">Volver</button>
+    </div>
+       
+    
+</form>

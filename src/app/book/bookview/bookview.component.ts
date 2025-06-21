@@ -62,22 +62,24 @@ export class BookviewComponent implements OnInit{
           this.bookData = book;
           this.fillValuesForm(book);
           this.name=book.title;
-          this.userService.getUser(book.userCreatedId).subscribe({
-            next:(u) =>{
-              book.usernameCreatedBy = u.name + " " + u.surname;
-              this.usernameCreatedBy = book.usernameCreatedBy;
-              this.canEditOrDelete = this.checkIfCanEditOrDelete();
-              this.isClient = this.checkIfClientUser();
-              if(!this.canEditOrDelete) this.editMode=false;
-              if(this.editMode) this.habilitarEdicion();
-            },
-            error: (err) => {
-              book.usernameCreatedBy="Anónimo"
-              this.canEditOrDelete = this.checkIfCanEditOrDelete();
-              if(!this.canEditOrDelete) this.editMode=false;
-              if(this.editMode) this.habilitarEdicion();
-            }
-          });
+          this.isClient = this.checkIfClientUser();
+          if(!this.isClient){
+            this.userService.getUser(book.userCreatedId).subscribe({
+              next:(u) =>{
+                book.usernameCreatedBy = u.name + " " + u.surname;
+                this.usernameCreatedBy = book.usernameCreatedBy;
+                this.canEditOrDelete = this.checkIfCanEditOrDelete();
+                if(!this.canEditOrDelete) this.editMode=false;
+                if(this.editMode) this.habilitarEdicion();
+              },
+              error: (err) => {
+                book.usernameCreatedBy="Anónimo"
+                this.canEditOrDelete = this.checkIfCanEditOrDelete();
+                if(!this.canEditOrDelete) this.editMode=false;
+                if(this.editMode) this.habilitarEdicion();
+              }
+            });
+          }
         }
       });
       
