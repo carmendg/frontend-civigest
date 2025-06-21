@@ -154,6 +154,7 @@ export class ArchiveviewComponent implements OnInit {
     if (v.titulo !== this.archiveData.title) updatedArchive.title = v.titulo;
     if (v.resumen !== this.archiveData.summary) updatedArchive.summary = v.resumen;
     if (v.autores !== this.archiveData.authorIds) updatedArchive.authorIds = v.autores;
+    if (v.fechaPubli !== this.archiveData.publicationDate) updatedArchive.publicationDate = v.fechaPubli;
     if (v.fichero !== this.archiveData.file){
       updatedArchive.file = v.fichero;
       updatedArchive.fileMimeType = v.ficheroMimeType
